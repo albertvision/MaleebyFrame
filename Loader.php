@@ -76,37 +76,32 @@ class Loader {
         }
     }
     
+    /**
+     * Get library
+     * @param string $name Library name
+     * @return object Library object
+     */
     public function library($name) {
         $this->setUp();
         if(!in_array($name, $this->_sys_libs)) {
-            if(is_array($name)) {
-                foreach($name as $libraryName) {
-                    return $this->loadLibrary($libraryName);
-                }
+            $_sys_path = realpath(SYS_PATH."/libraries/$name.php");
+            $_app_path = realpath(APP_PATH."/libraries/$name.php");
+
+            if($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
+                $namespace = 'Maleeby\Libraries\\';
+            } elseif($_app_path && is_readable($_app_path) && is_file($_app_path)) {
+                $namespace = 'Libraries\\';
             } else {
-                return $this->loadLibrary($name);
+                throw new \Exception('Library not found: '.$name);
             }
+
+            $library = $namespace.str_replace('/','\\',$name);
+            $this->_sys_libs[$name] = new $library;
         }
-        return $this->_sys_libs;
+        return $this->_sys_libs[$name];
         
     }
     
-    public function loadLibrary($name) {
-        $_sys_path = realpath(SYS_PATH."/libraries/$name.php");
-        $_app_path = realpath(APP_PATH."/libraries/$name.php");
-
-        if($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
-            $namespace = 'Maleeby\Libraries\\';
-        } elseif($_app_path && is_readable($_app_path) && is_file($_app_path)) {
-            $namespace = 'Libraries\\';
-        } else {
-            throw new \Exception('Library not found: '.$name);
-        }
-
-        $library = $namespace.str_replace('/','\\',$name);
-        $this->_sys_libs[$name] = new $library;
-        return $this->_sys_libs[$name];
-    }
     /**
      * Get helper
      * @param string|array $name Helper name
