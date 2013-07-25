@@ -30,7 +30,7 @@ class Core {
     public $autoload = null;
 
     private function __construct() {
-        $this->autoload = AutoLoad::load();
+        $this->autoload = AutoLoader::load();
         $this->autoload->setNamespace('Maleeby', realpath(__DIR__));
         set_exception_handler(array('\Maleeby\ErrorHandling', 'catchExceptions'));
     }
@@ -52,6 +52,7 @@ class Core {
      */
     public function run() {
         define('SYS_PATH', realpath(__DIR__));
+        define('FRAME_VER', '0.1.2');
         
         $this->config = \Maleeby\Config::load();
         $this->config->setConfigDir();

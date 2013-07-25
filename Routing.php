@@ -44,15 +44,16 @@ class Routing {
         $this->core = \Maleeby\Core::load();
         $this->core->autoload->setNamespace('controllers', realpath('..' . $this->core->getConfig()->main['controllers_path']));
         $_config = $this->core->getConfig()->main;
+        $_routesConfig = $this->core->getConfig()->routing;
         
         $_parsedScriptName = pathinfo($_SERVER['SCRIPT_NAME']);
         $_parsed = parse_url(str_replace($_parsedScriptName['basename'] , '', str_replace($_parsedScriptName['dirname'].'/','',$_SERVER['REQUEST_URI'])));
         $_path = $_parsed['path'][0] == '/' ? substr($_parsed['path'], 1, (strlen($_parsed['path'])-1)) : $_parsed['path']; // Ако завършва на наклонена черта, то тогава я маха
         $_path = substr($_path, -1) == '/' ? substr($_path, 0, strlen($_path)-1) : $_path;
         $_params = array();        
-        echo $_path.'--';
-        if(is_array($_config['routing']) && count($_config['routing']) > 0) {
-            foreach($_config['routing'] as $k=>$v) {
+        
+        if(is_array($_routesConfig) && count($_routesConfig) > 0) {
+            foreach($_routesConfig as $k=>$v) {
                 $_params = explode('/',str_replace($k.'/', '', $_path));
                 $controller = $_params[0];
                 $method = $_params[1];
@@ -92,9 +93,9 @@ class Routing {
         if($method == NULL) {
             $method = $_config['default_method'];
         }
-        if($namespace == NULL && $_config['routing']['*']['namespace']) {
-            $namespace = $_config['routing']['*']['namespace'];
-        } elseif($namespace == null && !$_config['routing']['*']['namespace'] ) {
+        if($namespace == NULL && $_routesConfig['*']['namespace']) {
+            $namespace = $_routesConfig['*']['namespace'];
+        } elseif($namespace == null && !$_routesConfig['*']['namespace'] ) {
             throw new \Exception('Default route configuration missing!');
         }
         

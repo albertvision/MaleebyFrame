@@ -31,9 +31,6 @@ class DB {
      */
     private $params = array();
 
-    private function __construct() {
-        
-    }
 
     public static function load() {
         if(self::$_instance == null) {
@@ -45,7 +42,7 @@ class DB {
     public static function connect() {
         $db = self::load();
         if(self::$_con == null) {
-            self::$_config = \Maleeby\Core::load()->getConfig()->library('db');
+            self::$_config = \Maleeby\Core::load()->getConfig()->database;
             $_conData = self::$_config;
             self::$_con = new \PDO((isset($_conData['driver']) ? $_conData['driver'] : 'mysql').':host='.$_conData['dbhost'].';dbname='.$_conData['dbname'], $_conData['dbuser'], $_conData['dbpass'], (isset($_conData['pdo_options']) ? $_conData['pdo_options'] : array()));
         }

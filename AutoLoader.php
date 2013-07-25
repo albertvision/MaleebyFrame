@@ -1,7 +1,7 @@
 <?php
 
 namespace Maleeby;
-class AutoLoad {
+class AutoLoader {
     private static $instance = null;
     private $namespaces = array();
     
@@ -15,7 +15,7 @@ class AutoLoad {
      */
     public static function load() {
         if (self::$instance == null ) {
-            self::$instance = new \Maleeby\AutoLoad();
+            self::$instance = new \Maleeby\AutoLoader();
         }
         return self::$instance;
     }
@@ -24,7 +24,7 @@ class AutoLoad {
      * Registers namespaces' path
      */
     private function autoLoadRegister() {
-        spl_autoload_register(array('\Maleeby\AutoLoad','autoLoad'));
+        spl_autoload_register(array('\Maleeby\AutoLoader','autoLoad'));
     }
     
     /**

@@ -9,6 +9,7 @@ class Loader {
      * @var array
      */
     private $_sys_models = array();
+    private $_sys_libs = array();
     
     public function __construct() {
         $this->setUp();
@@ -37,11 +38,6 @@ class Loader {
         return $this->_sys_models[$name];
     }
 
-    public function themeView($name, $data = array(), $returnString = FALSE) {
-        $theme = $this->model('admin/Themes')->getCurrent();
-        return $this->view($name, $data, $returnString, $theme);
-    }
-    
     /**
      * Load view
      * @param string $name View's name
@@ -80,6 +76,41 @@ class Loader {
         }
     }
     
+    public function library($name) {
+        $this->setUp();
+        if(!in_array($name, $this->_sys_libs)) {
+            if(is_array($name)) {
+                foreach($name as $libraryName) {
+                    return $this->loadLibrary($libraryName);
+                }
+            } else {
+                return $this->loadLibrary($name);
+            }
+        }
+        return $this->_sys_libs;
+        
+    }
+    
+    public function loadLibrary($name) {
+        $_sys_path = realpath(SYS_PATH."/libraries/$name.php");
+        $_app_path = realpath(APP_PATH."/libraries/$name.php");
+
+        if($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
+            $namespace = 'Maleeby\Libraries\\';
+        } elseif($_app_path && is_readable($_app_path) && is_file($_app_path)) {
+            $namespace = 'Libraries\\';
+        } else {
+            throw new \Exception('Library not found: '.$name);
+        }
+
+        $library = $namespace.str_replace('/','\\',$name);
+        $this->_sys_libs[$name] = new $library;
+        return $this->_sys_libs[$name];
+    }
+    /**
+     * Get helper
+     * @param string|array $name Helper name
+     */
     public function helper($name) {
         if(is_array($name)) {
             foreach($name as $helperName) {
@@ -90,6 +121,11 @@ class Loader {
         }
     }
     
+    /**
+     * Load helper
+     * @param string $name Helper name
+     * @throws \Exception 
+     */
     private function loadHelper($name) {
         $_app_path = realpath(APP_PATH."/helpers/$name.php");
         $_sys_path = realpath(SYS_PATH."/helpers/$name.php");

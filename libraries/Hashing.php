@@ -15,7 +15,7 @@ class Hashing  {
      * @return string Hashed data
      */
     public static function hash($data, $salt = null, $algorithm = null) {
-        $_config = \Maleeby\Core::load()->getConfig()->main['library']['hashing'];
+        $_config = \Maleeby\Core::load()->getConfig()->hashing;
         if($salt == null) {
             $salt = $_config['salt'];
         }

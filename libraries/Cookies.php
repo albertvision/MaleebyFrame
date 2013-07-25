@@ -18,7 +18,7 @@ class Cookies {
      * @param string $domain Cookie domain.
      * @param bool $secure. Use HTTPS?
      */
-    public static function set($name, $value, $expire = 3600, $path = '/', $domain = null, $secure = false, $httponly = false) {
+    public function set($name, $value, $expire = 3600, $path = '/', $domain = null, $secure = false, $httponly = false) {
         setcookie($name, $value, time()+$expire, $path, $domain, $secure, $httponly);
     }
     
@@ -27,7 +27,7 @@ class Cookies {
      * @param string $name Cookie name
      * @return mixed Cookie value
      */
-    public static function get($name) {
+    public function get($name) {
         return $_COOKIE[$name];
     }
     
@@ -35,11 +35,11 @@ class Cookies {
      * Remove cookies
      * @param string $name Cookie name
      */
-    public static function remove($name) {
+    public function remove($name) {
         setcookie($name, '', 0, '/');
     }
     
-    public static function all() {
+    public function all() {
         return $_COOKIE;
     }
 }
