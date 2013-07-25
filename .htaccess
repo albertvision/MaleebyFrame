@@ -1,0 +1,3 @@
+Allow from ::1
+Allow from 93.183.175.20
+Deny from all
