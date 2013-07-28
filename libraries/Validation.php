@@ -62,6 +62,11 @@ class Validation {
                             $result['err'][$field] = sprintf(self::getMSG('allowedValues', $field), $val); // Load message
                         }
                         break;
+                    case 'banValues':
+                        if(!$validated[$field]['required'] && ((is_array($val) && in_array($_POST[$field], $val)) || (!is_array($val) && $_POST[$field] == $val))) {
+                            $result['err'][$field] = sprintf(self::getMSG('banValues', $field), $val); // Load message
+                        }
+                        break;
                     case 'email':
                         if(!$validated[$field]['required'] && !filter_var($_POST[$field], FILTER_VALIDATE_EMAIL)) {
                             $result['err'][$field] = sprintf(self::getMSG('email', $field), $val); // Load message
@@ -102,6 +107,7 @@ class Validation {
             'maxLength'=>'Please enter no more than %s characters!',
             'equalTo'=>'Please enter the same value again!',
             'allowedValues'=>'Invalid value!',
+            'banValues'=>'Invalid value!',
             'email'=>'Invalid email!',
             'telephone'=>'Invalid telephone number!'
         );
