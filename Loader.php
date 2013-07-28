@@ -32,7 +32,7 @@ class Loader {
             if ($realpath && is_file($realpath) && is_readable($realpath)) {
                 $this->_sys_models[$name] = new $model();
             } else {
-                throw new \Exception('Model path not found: models/' . $name.$suffix.'.php');
+                throw new \Exception('Model not found: models/' . $name.$suffix.'.php');
             }
         }
         return $this->_sys_models[$name];
@@ -72,7 +72,7 @@ class Loader {
                 echo $output;
             }
         } else {
-            throw new \Exception("Invalid view name: $name");
+            throw new \Exception("View not found: views/$name.php");
         }
     }
     
@@ -131,7 +131,7 @@ class Loader {
         } elseif($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
             include $_sys_path;
         } else {
-            throw new \Exception('Invalid helper name: '.$name);
+            throw new \Exception('Heler not found: '.$name);
         }
     }
     
