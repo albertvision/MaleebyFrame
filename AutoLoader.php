@@ -35,10 +35,10 @@ class AutoLoader {
     public function autoLoad($class) {
         foreach($this->namespaces as $namespace=>$path) {
             if(strpos($class, $namespace) === 0) {
-                if(strpos($namespace, 'controller') !== FALSE) {
+                if(strpos($namespace, 'Controller') !== FALSE) {
                     $suffix = \Maleeby\Core::load()->getConfig()->main['controllers_suffix'];
                     $errCode = 404;
-                } elseif(strpos($namespace, 'model') !== FALSE) {
+                } elseif(strpos($namespace, 'Model') !== FALSE) {
                     $suffix = \Maleeby\Core::load()->getConfig()->main['models_suffix'];
                     $errCode = 404;
                 } 

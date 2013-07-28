@@ -42,7 +42,7 @@ class Routing {
      */
     public function division() {
         $this->core = \Maleeby\Core::load();
-        $this->core->autoload->setNamespace('controllers', realpath('..' . $this->core->getConfig()->main['controllers_path']));
+        $this->core->autoload->setNamespace('Controllers', realpath('..' . $this->core->getConfig()->main['controllers_path']));
         $_config = $this->core->getConfig()->main;
         $_routesConfig = $this->core->getConfig()->routing;
         

@@ -23,9 +23,9 @@ class Loader {
      */
     public function model($name) {
         $this->setUp();
-        $this->_sys_core->autoload->setNamespace('models', realpath('..' . $this->_sys_core->getConfig()->main['models_path']));
+        $this->_sys_core->autoload->setNamespace('Models', realpath('..' . $this->_sys_core->getConfig()->main['models_path']));
         if (!in_array($name, $this->_sys_models)) {
-            $model = 'models\\' . str_replace('/','\\', $name);
+            $model = 'Models\\' . str_replace('/','\\', $name);
             $suffix = $this->_sys_core->getConfig()->main['models_suffix'];
             $file = \Maleeby\Core::fixPath("../".$this->_sys_core->getConfig()->main['models_path'].'/'.$name.$suffix.".php");
             $realpath = realpath($file);
@@ -72,7 +72,7 @@ class Loader {
                 echo $output;
             }
         } else {
-            throw new \Exception("Invalid view name: $name.$ext");
+            throw new \Exception("Invalid view name: $name");
         }
     }
     
@@ -83,6 +83,7 @@ class Loader {
      */
     public function library($name) {
         $this->setUp();
+        $this->_sys_core->autoload->setNamespace('Libraries', realpath('../libraries' ));
         if(!in_array($name, $this->_sys_libs)) {
             $_sys_path = realpath(SYS_PATH."/libraries/$name.php");
             $_app_path = realpath(APP_PATH."/libraries/$name.php");
@@ -94,8 +95,8 @@ class Loader {
             } else {
                 throw new \Exception('Library not found: '.$name);
             }
-
             $library = $namespace.str_replace('/','\\',$name);
+            //echo $library;
             $this->_sys_libs[$name] = new $library;
         }
         return $this->_sys_libs[$name];
@@ -136,6 +137,10 @@ class Loader {
     
     private function setUp() {
         $this->_sys_core = \Maleeby\Core::load();
+    }
+    
+    public function load($file) {
+        include $file;
     }
     
     public function __get($name) {
