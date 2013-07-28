@@ -40,7 +40,7 @@ class Validation {
                         }
                         break;
                     case 'minLength':
-                        if(!$validated[$field]['required'] && strlen($_POST[$field]) < $val) {
+                        if(!$validated[$field]['required'] && strlen($_POST[$field]) < $val && strlen($_POST[$field])) {
                             $result['err'][$field] = sprintf(self::getMSG('minLength', $field), $val); // Load message
                             $validated[$field][$rule] = TRUE;
                         }
