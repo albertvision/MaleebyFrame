@@ -47,7 +47,7 @@ class Config {
             $key = str_replace('.php', '', basename($file));
             $this->data[$key] = include $path;
         } else {
-            throw new \Exception('File not found: ' . $file);
+            throw new \Exception('Configuration file not found: ' . $file);
         }
     }
 

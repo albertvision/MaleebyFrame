@@ -135,6 +135,15 @@ class Loader {
         }
     }
     
+    /**
+     * Load configuration
+     * @param string $name Configuration file name
+     * @return array
+     */
+    public function config($name) {
+        return Core::load()->getConfig()->$name;
+    }
+    
     private function setUp() {
         $this->_sys_core = \Maleeby\Core::load();
     }
