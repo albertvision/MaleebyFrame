@@ -96,7 +96,7 @@ class Routing {
         if($namespace == NULL && $_routesConfig['*']['namespace']) {
             $namespace = $_routesConfig['*']['namespace'];
         } elseif($namespace == null && !$_routesConfig['*']['namespace'] ) {
-            throw new \Exception('Default route configuration missing!');
+            throw new \Exception('Default route in configuration missing!');
         }
         
         $controller = $namespace.'\\'.ucfirst(strtolower($controller));

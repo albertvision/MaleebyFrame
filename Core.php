@@ -52,7 +52,7 @@ class Core {
      */
     public function run() {
         define('SYS_PATH', realpath(__DIR__));
-        define('FRAME_VER', '0.1.2');
+        define('FRAME_VER', '0.1.5');
         
         $this->config = \Maleeby\Config::load();
         $this->config->setConfigDir();

@@ -47,7 +47,7 @@ class Config {
             $key = str_replace('.php', '', basename($file));
             $this->data[$key] = include $path;
         } else {
-            throw new \Exception('Configuration file not found: ' . $file);
+            throw new \Exception('Configuration file not found: ' . Core::fixPath($file));
         }
     }
 
@@ -61,7 +61,7 @@ class Config {
         if (file_exists($path)) {
             $this->config_dir = $path;
         } else {
-            throw new Exception('Invalid config dir: ' . $path);
+            throw new Exception('Configuration directory not found: ' . Core::fixPath($path));
         }
     }
 
