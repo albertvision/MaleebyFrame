@@ -27,7 +27,7 @@ class Loader {
         if (!in_array($name, $this->_sys_models)) {
             $model = 'Models\\' . str_replace('/','\\', $name);
             $suffix = $this->_sys_core->getConfig()->main['models_suffix'];
-            $file = \Maleeby\Core::fixPath("../".$this->_sys_core->getConfig()->main['models_path'].'/'.$name.$suffix.".php");
+            $file = Core::fixPath("../".$this->_sys_core->getConfig()->main['models_path'].'/'.$name.$suffix.".php");
             $realpath = realpath($file);
             if ($realpath && is_file($realpath) && is_readable($realpath)) {
                 $this->_sys_models[$name] = new $model();
@@ -145,7 +145,7 @@ class Loader {
     }
     
     private function setUp() {
-        $this->_sys_core = \Maleeby\Core::load();
+        $this->_sys_core = Core::load();
     }
     
     public function load($file) {

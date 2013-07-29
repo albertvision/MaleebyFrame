@@ -41,7 +41,7 @@ class Routing {
      * Routing of controllers/models/properties
      */
     public function division() {
-        $this->core = \Maleeby\Core::load();
+        $this->core = Core::load();
         $this->core->autoload->setNamespace('Controllers', realpath('..' . $this->core->getConfig()->main['controllers_path']));
         $_config = $this->core->getConfig()->main;
         $_routesConfig = $this->core->getConfig()->routing;
@@ -118,7 +118,7 @@ class Routing {
      * @return string Default controller
      */
     public function getDefaultController() {
-        $contr = \Maleeby\Core::load()->getConfig()->main['default_controller'];
+        $contr = $this->core->getConfig()->main['default_controller'];
         if (!$contr) {
             $contr = 'DefaultController';
         }
@@ -130,7 +130,7 @@ class Routing {
      * @return string Default method
      */
     public function getDefaultMethod() {
-        $contr = \Maleeby\Core::load()->getConfig()->main['default_method'];
+        $contr = $this->core->getConfig()->main['default_method'];
         if (!$contr) {
             $contr = 'index';
         }

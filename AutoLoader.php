@@ -36,14 +36,14 @@ class AutoLoader {
         foreach($this->namespaces as $namespace=>$path) {
             if(strpos($class, $namespace) === 0) {
                 if(strpos($namespace, 'Controller') !== FALSE) {
-                    $suffix = \Maleeby\Core::load()->getConfig()->main['controllers_suffix'];
+                    $suffix = Core::load()->getConfig()->main['controllers_suffix'];
                     $errCode = 404;
                 } elseif(strpos($namespace, 'Model') !== FALSE) {
-                    $suffix = \Maleeby\Core::load()->getConfig()->main['models_suffix'];
+                    $suffix = Core::load()->getConfig()->main['models_suffix'];
                     $errCode = 404;
                 } 
                 $class = $class.$suffix;
-                $filename = \Maleeby\Core::fixPath(str_replace($namespace, $path.DIRECTORY_SEPARATOR, $class).'.php');
+                $filename = Core::fixPath(str_replace($namespace, $path.DIRECTORY_SEPARATOR, $class).'.php');
                 $file = realpath($filename);
                 if(file_exists($file)) {
                     include $file;

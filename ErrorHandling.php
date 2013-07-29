@@ -14,7 +14,7 @@ class ErrorHandling {
      */
     public static function catchExceptions(\Exception $err) {
         header('HTTP/1.0 '.$err->getCode().' '.self::getErrorDesc($err->getCode()));
-        if (\Maleeby\Core::load()->getConfig()->main['debug'] === TRUE) {
+        if (Core::load()->getConfig()->main['debug'] === TRUE) {
             echo '<p><b>System error: </b>' . $err->getMessage() . ' in ' . $err->getFile() . ':' . $err->getLine() . '</b></p>';
         } else {
             $errCode = ($err->getCode() != 0 ? $err->getCode() : 500);
@@ -31,7 +31,7 @@ class ErrorHandling {
      * @return bool|string
      */
     public static function loadErrorFile($errCode) {
-        $_sys_errorFile = \Maleeby\Core::load()->getConfig()->main['errors_path']."/$errCode.php";
+        $_sys_errorFile = Core::load()->getConfig()->main['errors_path']."/$errCode.php";
         $_sys_errorFilePath = realpath('../'.$_sys_errorFile);
         if(!$_sys_errorFilePath || !strlen($_sys_errorFile)) {
             return '<h1>'.self::getErrorDesc($errCode).'!</h1> <h2>System code: ' . $errCode . '</h2><hr><i>Please, contact with <a href="mailto: '.$_SERVER['SERVER_ADMIN'].'">administrator</a> and say him about this error!</i>';
