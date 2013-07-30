@@ -140,8 +140,8 @@ class Loader {
      * @param string $name Configuration file name
      * @return array
      */
-    public function config($name) {
-        return Core::load()->getConfig()->$name;
+    public function config() {
+        return Core::load()->getConfig();
     }
     
     private function setUp() {
