@@ -29,11 +29,7 @@ class Loader {
             $suffix = $this->_sys_core->getConfig()->main['models_suffix'];
             $file = Core::fixPath("../".$this->_sys_core->getConfig()->main['models_path'].'/'.$name.$suffix.".php");
             $realpath = realpath($file);
-            if ($realpath && is_file($realpath) && is_readable($realpath)) {
-                $this->_sys_models[$name] = new $model();
-            } else {
-                throw new \Exception('Model not found: models/' . $name.$suffix.'.php');
-            }
+            $this->_sys_models[$name] = new $model();
         }
         return $this->_sys_models[$name];
     }
@@ -90,14 +86,11 @@ class Loader {
 
             if($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
                 $namespace = 'Maleeby\Libraries\\';
-            } elseif($_app_path && is_readable($_app_path) && is_file($_app_path)) {
-                $namespace = 'Libraries\\';
             } else {
-                throw new \Exception('Library not found: '.$name);
+                $namespace = 'Libraries\\';
             }
             $library = $namespace.str_replace('/','\\',$name);
-            //echo $library;
-            $this->_sys_libs[$name] = new $library;
+            $this->_sys_libs[$name] = new $library();
         }
         return $this->_sys_libs[$name];
         
@@ -131,7 +124,7 @@ class Loader {
         } elseif($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
             include $_sys_path;
         } else {
-            throw new \Exception('Heler not found: '.$name);
+            throw new \Exception('Heler not found: '.  Core::fixPath(SYS_PATH."/helpers/$name.php"));
         }
     }
     

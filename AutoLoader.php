@@ -35,20 +35,28 @@ class AutoLoader {
     public function autoLoad($class) {
         foreach($this->namespaces as $namespace=>$path) {
             if(strpos($class, $namespace) === 0) {
-                if(strpos($namespace, 'Controller') !== FALSE) {
+                if(strpos($namespace, 'Controller') === 0) {
                     $suffix = Core::load()->getConfig()->main['controllers_suffix'];
+                    $fileType = 'Controller';
                     $errCode = 404;
-                } elseif(strpos($namespace, 'Model') !== FALSE) {
+                } elseif(strpos($namespace, 'Model') === 0) {
                     $suffix = Core::load()->getConfig()->main['models_suffix'];
+                    $fileType = 'Model';
                     $errCode = 404;
-                } 
+                } elseif(strpos($class, 'Libraries') === 0 || strpos($class, 'Maleeby\Libraries') === 0) {
+                    $fileType = 'Library';
+                } else {
+                    $fileType = 'File';
+                }
+                
                 $class = $class.$suffix;
                 $filename = Core::fixPath(str_replace($namespace, $path.DIRECTORY_SEPARATOR, $class).'.php');
                 $file = realpath($filename);
+                
                 if(file_exists($file)) {
                     include $file;
                 } else {
-                    throw new \Exception('File not found: '.$filename, $errCode);
+                    throw new \Exception($fileType.' not found: '.$filename, $errCode);
                 }
                 break;
             }
