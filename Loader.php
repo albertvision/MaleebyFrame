@@ -96,37 +96,6 @@ class Loader {
         
     }
     
-    /**
-     * Get helper
-     * @param string|array $name Helper name
-     */
-    public function helper($name) {
-        if(is_array($name)) {
-            foreach($name as $helperName) {
-                $this->loadHelper($helperName);
-            }
-        } else {
-            $this->loadHelper($name);
-        }
-    }
-    
-    /**
-     * Load helper
-     * @param string $name Helper name
-     * @throws \Exception 
-     */
-    private function loadHelper($name) {
-        $_app_path = realpath(APP_PATH."/helpers/$name.php");
-        $_sys_path = realpath(SYS_PATH."/helpers/$name.php");
-        
-        if($_app_path && is_readable($_app_path) && is_file($_app_path)) {
-            include $_app_path;
-        } elseif($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
-            include $_sys_path;
-        } else {
-            throw new \Exception('Heler not found: '.  Core::fixPath(SYS_PATH."/helpers/$name.php"));
-        }
-    }
     
     /**
      * Load configuration
