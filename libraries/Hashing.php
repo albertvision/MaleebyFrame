@@ -3,12 +3,19 @@
 namespace Maleeby\Libraries;
 
 /**
- * Hashing class
+ * Data hashing class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Libraries
  */
 class Hashing  {
     
     /**
      * Data hashing
+     * @static
      * @param string|array $data Data to hashing
      * @param string $salt Hashing salt
      * @param string $algorithm Hashing algorithm
@@ -28,6 +35,7 @@ class Hashing  {
     
     /**
      * MD5 Hashing
+     * @static
      * @param string $data Data to hashing
      * @param bool $secured TRUE for secured hashing /via $this->encrypt/ or FALSE for MD5() function
      * @param string $salt Hashing salt

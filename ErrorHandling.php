@@ -1,15 +1,24 @@
 <?php
 
 namespace Maleeby;
+
+/**
+ * Error handling class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Core
+ */
 class ErrorHandling {
     
-    //private static $handle, $hashedVars;
-    private function  __construct() {
-        ;
-    }
+    private function  __construct() { }
     
     /**
      * Catchs exceptions
+     * @access public
+     * @static
      * @param object \Exception $err Exception object
      */
     public static function catchExceptions(\Exception $err) {
@@ -27,6 +36,8 @@ class ErrorHandling {
     
     /**
      * Loads error's file
+     * @access public
+     * @static
      * @param int $errCode Error code
      * @return bool|string
      */
@@ -47,6 +58,8 @@ class ErrorHandling {
     
     /**
      * Error logging in file
+     * @access public
+     * @static
      * @param object $err Exception object
      */
     public static function logError($err) {
@@ -67,6 +80,8 @@ class ErrorHandling {
     
     /**
      * Get error's description
+     * @access public
+     * @static
      * @param int $errCode Error's code
      * @return string Error's description
      */

@@ -3,16 +3,23 @@
 namespace Maleeby\Libraries;
 
 /**
- * Filtering data
+ * Data filtering class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Libraries
  */
 class Filtering {
 
     /**
      * HTML Filtering
+     * @static
      * @param string $string
      * @return tring Filtered HTML
      */
-    public function html($string) {
+    public static function html($string) {
         return htmlspecialchars($string);
     }
 
@@ -20,10 +27,11 @@ class Filtering {
      * XSS Filtering
      * https://gist.github.com/mbijon/1098477
      * 
+     * @static
      * @param string $data Data to filtering
      * @return string Filtered data
      */
-    function xss($data) {
+    public static function xss($data) {
         $data = str_replace(array('&amp;', '&lt;', '&gt;'), array('&amp;amp;', '&amp;lt;', '&amp;gt;'), $data);
         $data = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $data);
         $data = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $data);

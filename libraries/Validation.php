@@ -1,10 +1,21 @@
 <?php
 
 namespace Maleeby\Libraries;
+
+/**
+ * Data validation class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Libraries
+ */
 class Validation {
     /**
      * Data for validation
      * @var array
+     * @static
      */
     private static $data = array();
     
@@ -88,6 +99,7 @@ class Validation {
     
     /**
      * Get error message
+     * @static
      * @param string $rule
      * @param string $field
      * @return string

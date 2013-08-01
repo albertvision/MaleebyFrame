@@ -1,10 +1,21 @@
 <?php
 
 namespace Maleeby\Libraries;
+
+/**
+ * General functions class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Libraries
+ */
 class Stuff {
     
     /**
      * Rederecting
+     * @static
      * @param string $url Redirect URL
      */
     public static function redirect($url) {
@@ -14,6 +25,7 @@ class Stuff {
     
     /**
      * String generating
+     * @static
      * @param int $length String length
      * @return string Generated string
      */
@@ -26,6 +38,7 @@ class Stuff {
     
     /**
      * Transliterating of string
+     * @static
      * @param string $text String to transliterate
      * @return string Transliterated string
      */
@@ -39,6 +52,7 @@ class Stuff {
     
     /**
      * Send email
+     * @static
      * @param type $receiverEmail Receiver email
      * @param type $senderEmail Sender email
      * @param type $senderName Sender name
@@ -60,6 +74,7 @@ class Stuff {
     
     /**
      * Search word in string
+     * @static
      * @param string $string String in which to search
      * @param string $what Word to search
      * @return boolean
@@ -75,6 +90,7 @@ class Stuff {
     
     /**
      * Translates date format to bulgarian months
+     * @static
      * @param int $timestamp Timestamp
      * @return string Translated date format
      */
@@ -92,6 +108,7 @@ class Stuff {
     
     /**
      * Get configuration file
+     * @static
      * @param string $name Configuration file name
      * @return array Configuration
      */
@@ -101,6 +118,7 @@ class Stuff {
     
     /**
      * Remove folder and content in it
+     * @static
      * @param string $dir Folder path
      */
     public static function removeDir($dir) { 

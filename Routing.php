@@ -2,32 +2,39 @@
 
 namespace Maleeby;
 
+/**
+ * Routing class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Core
+ */
 class Routing {
 
     /**
      * Instance of this class
+     * @access private
      * @var object 
      */
     private static $_instance = null;
 
     /**
      * Instance of Core class 
+     * @access private
      * @var object 
      */
     private $core;
 
-    /**
-     * Get URI parameters
-     * @var string
-     */
-    private $uri = null;
-
-    private function __construct() {
+    private function __construct() { 
         ;
     }
 
     /**
      * Set instance of this class
+     * @access public
+     * @static
      * @return object Instance
      */
     public static function load() {
@@ -39,6 +46,7 @@ class Routing {
     
     /**
      * Routing of controllers/models/properties
+     * @access public
      */
     public function division() {
         $this->core = Core::load();
@@ -116,6 +124,7 @@ class Routing {
     /**
      * Gets default controller setted in the main configuration
      * @return string Default controller
+     * @access public
      */
     public function getDefaultController() {
         $contr = $this->core->getConfig()->main['default_controller'];
@@ -128,6 +137,7 @@ class Routing {
     /**
      * Gets default controller method setted in the main configuration
      * @return string Default method
+     * @access public
      */
     public function getDefaultMethod() {
         $contr = $this->core->getConfig()->main['default_method'];

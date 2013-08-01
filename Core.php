@@ -2,22 +2,35 @@
 
 namespace Maleeby;
 
+/**
+ * MaleebyFrame Core
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Core
+ */
 class Core {
 
     /**
      * Instance of this class
+     * @access private
+     * @static
      * @var object 
      */
     private static $_instance = null;
 
     /**
      * Configuration array
+     * @access private
      * @var array 
      */
     private $config = array();
 
     /**
      * Instance of Routing class
+     * @access private
      * @var object 
      */
     private $routing;
@@ -37,6 +50,7 @@ class Core {
 
     /**
      * Get instance of this class
+     * @access public
      * @return object Instance of this class
      */
     public static function load() {
@@ -49,6 +63,7 @@ class Core {
 
     /**
      * Application starting
+     * @access public
      */
     public function run() {
         define('SYS_PATH', realpath(__DIR__));
@@ -62,6 +77,8 @@ class Core {
 
     /**
      * Fix path
+     * @access public
+     * @static
      * @param string $path Path
      * @return string Fixed path
      */
@@ -71,6 +88,7 @@ class Core {
 
     /**
      * Get Config class
+     * @access public
      * @return type
      */
     public function getConfig() {
@@ -78,7 +96,7 @@ class Core {
     }
     
     /**
-     * 
+     * @access public
      * @param type $name
      * @param type $arguments
      * @throws \Exception

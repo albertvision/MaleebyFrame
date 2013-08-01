@@ -1,13 +1,21 @@
 <?php
 
 namespace Maleeby\Libraries;
- /**
-  * Session managing
-  */
+
+/**
+ * Session managing class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Libraries
+ */
 class Sessions {    
     
     /**
      * Sets value of a session
+     * @static
      * @param string $name Session's name
      * @param string|array $value Session's value
      */
@@ -17,6 +25,7 @@ class Sessions {
     
     /**
      * Get value of a session
+     * @static
      * @param string $name Session name
      * @return mixed Session value
      */
@@ -26,6 +35,7 @@ class Sessions {
     
     /**
      * Remove session
+     * @static
      * @param string $name Session to remove
      */
     public static function remove($name) {
@@ -35,6 +45,7 @@ class Sessions {
     
     /**
      * Get all sessions
+     * @static
      * @return array Sessions
      */
     public static function all() {
@@ -43,6 +54,7 @@ class Sessions {
     
     /**
      * Session destroying
+     * @static
      */
     public static function destroy() {
         session_destroy();

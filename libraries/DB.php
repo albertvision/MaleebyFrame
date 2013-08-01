@@ -2,36 +2,66 @@
 
 namespace Maleeby\Libraries;
 
+/**
+ * Database connection class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Libraries
+ */
 class DB {
 
+    /**
+     * Instance of this class
+     * @var object|null
+     * @static
+     */
     private static $_instance = null;
+    
+    /**
+     * DB configuration
+     * @access private
+     * @static
+     * @var array
+     */
     private static $_config = array();
     
     /**
      * Connection array
+     * @access private
+     * @static
      * @var array 
      */
     private static $_con = null;
     
     /**
      * Current prepare statement
+     * @access private
      * @var type 
      */
     private $stmt;
     
     /**
      * Query
+     * @access private
      * @var string 
      */
     private $query;
     
     /**
      * Query's parameters
+     * @access private
      * @var array 
      */
     private $params = array();
 
-
+    /**
+     * Get instantion of this class
+     * @static
+     * @return type
+     */
     public static function load() {
         if(self::$_instance == null) {
             self::$_instance = new \Maleeby\Libraries\DB();
@@ -39,6 +69,11 @@ class DB {
         return self::$_instance;
     }
     
+    
+    /**
+     * DB Connect
+     * @static
+     */
     public static function connect() {
         $db = self::load();
         if(self::$_con == null) {
@@ -52,6 +87,7 @@ class DB {
     
     /**
      * Create prepare statement
+     * @static
      * @param string $query Query
      * @param array $params Query's parameters
      * @param array $pdoOptions PDO options
@@ -68,6 +104,7 @@ class DB {
     
     /**
      * Execute query
+     * @static
      * @param array $params Query's parameters if they are not defined in prepare() method
      * @return \Maleeby\Database
      */
@@ -90,6 +127,7 @@ class DB {
     
     /**
      * Create auto executing query
+     * @static
      * @param string $query Query
      * @param array $params Query's parameters
      * @param array $pdoOptions PDO options
@@ -101,6 +139,7 @@ class DB {
     
     /**
      * Get SQL Error Code
+     * @static
      * @return string|bool
      */
     public static function getError() {
@@ -115,6 +154,7 @@ class DB {
     
     /**
      * Fetching of query
+     * @static
      * @return array 
      */
     public static function fetchAssoc() {
@@ -124,6 +164,7 @@ class DB {
     
     /**
      * Get a row
+     * @static
      */
     public static function fetchRowAssoc() {
         $db = self::connect();
@@ -132,6 +173,7 @@ class DB {
  
     /**
      * Fetching of column
+     * @static
      * @param string $column Column name
      * @return array
      */
@@ -142,6 +184,7 @@ class DB {
 
     /**
      * Get ID of the last inserted row
+     * @static
      * @return int
      */
     public static function lastID() {
@@ -151,6 +194,7 @@ class DB {
 
     /**
      * Get count of the affected rows
+     * @static
      * @return int
      */
     public function numRows() {
@@ -159,7 +203,8 @@ class DB {
     }
 
     /**
-     * Get prepare statement's property. FOR ADVANCED USERS!!
+     * Get prepare statement's property. For advanced users!
+     * @static
      * @return object
      */
     public static function getSTMT() {

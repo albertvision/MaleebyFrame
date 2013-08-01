@@ -2,18 +2,44 @@
 
 namespace Maleeby;
 
+/**
+ * Configuration class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Core
+ */
 class Config {
 
+    /**
+     * Configuration data
+     * @access private
+     * @var array|null 
+     */
     private $data = null;
+    
+    /**
+     * Configuration directory
+     * @access public
+     * @var null|string 
+     */
     public $config_dir = null;
+    
+    /**
+     * Instance of this class
+     * @access private
+     * @var null|object 
+     * @static
+     */
     private static $_instance = null;
 
-    private function __construct() {
-        ;
-    }
+    private function __construct() { }
 
     /**
      * Set instance of this class
+     * @access public
      * @return object Instance
      */
     public static function load() {
@@ -25,6 +51,7 @@ class Config {
 
     /**
      * Get configuration of any library
+     * @access public
      * @param string $lib Library
      * @return array 
      */
@@ -37,6 +64,7 @@ class Config {
 
     /**
      * Load configuration file
+     * @access public
      * @param string $file File to load
      * @throws \Exception
      */
@@ -53,6 +81,7 @@ class Config {
 
     /**
      * Set configuration directory
+     * @access public
      * @param string $path New configuration's path
      * @throws Exception
      */
@@ -67,6 +96,7 @@ class Config {
 
     /**
      * Get configuration directory
+     * @access public
      * @return string Configuration directory
      */
     public function getConfigDir() {
@@ -75,6 +105,7 @@ class Config {
 
     /**
      * Get configuration of any library
+     * @access public
      * @param string $name Library
      * @return array Configuration
      */

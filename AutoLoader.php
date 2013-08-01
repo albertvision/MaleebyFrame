@@ -1,8 +1,31 @@
 <?php
 
 namespace Maleeby;
+
+/**
+ * Auto loading class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Core
+ */
 class AutoLoader {
+    
+    /**
+     * Instance of this class
+     * @access private
+     * @var object|null
+     * @static
+     */
     private static $instance = null;
+    
+    /**
+     * Registered namespaces
+     * @access private
+     * @var array
+     */
     private $namespaces = array();
     
     private function __construct() {
@@ -12,6 +35,7 @@ class AutoLoader {
     /**
      * Get autoload instance
      * @return object
+     * @access public
      */
     public static function load() {
         if (self::$instance == null ) {
@@ -22,6 +46,7 @@ class AutoLoader {
     
     /**
      * Registers namespaces' path
+     * @access public
      */
     private function autoLoadRegister() {
         spl_autoload_register(array('\Maleeby\AutoLoader','autoLoad'));
@@ -30,6 +55,7 @@ class AutoLoader {
     /**
      * Auto load method.
      * @param string $class Class to load
+     * @access public
      * @throws \Exception 
      */
     public function autoLoad($class) {
@@ -65,6 +91,7 @@ class AutoLoader {
     
     /**
      * Method that sets namespace's path
+     * @access public
      * @param string $namespace Namespace
      * @param string $path Where does namespace is located
      * @throws \Exception

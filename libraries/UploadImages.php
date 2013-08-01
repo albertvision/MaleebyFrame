@@ -1,10 +1,21 @@
 <?php
 
 namespace Maleeby\Libraries;
+
+/**
+ * Image uploading class
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Libraries
+ */
 class UploadImages {
     
     /**
      * Get allowed image formats
+     * @static
      * @return array Allowed image formats
      */
     public static function allowedImageFormats() {
@@ -13,6 +24,7 @@ class UploadImages {
     
     /**
      * Check is file format allowed
+     * @static
      * @param string $format File format
      * @param string $type File type
      * @return boolean
@@ -32,6 +44,7 @@ class UploadImages {
     
     /**
      * Resizes images
+     * @static
      * @param string $tmpName Tmp file
      * @param string  $fileType File type
      * @param string $uploadPath Upload path
@@ -82,6 +95,7 @@ class UploadImages {
 
     /**
      * Gets to the desired size
+     * @static
      * @param string $image Image path
      * @param int $width Width to resize
      * @param int $height Height to resize
@@ -106,6 +120,7 @@ class UploadImages {
 
     /**
      * Upload a file
+     * @static
      * @param string $tmpName File Tmp
      * @param string $path Path to upload
      * @return boolean

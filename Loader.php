@@ -2,13 +2,29 @@
 
 namespace Maleeby;
 
+/**
+ * Loader class. It's used by applications.
+ *
+ * @author Yasen Georgiev <avbincco@gmail.com>
+ * @link http://framework.maleeby.ygeorgiev.com/
+ * @copyright Copyright &copy; 2013 Yasen Georgiev
+ * @license http://framework.maleeby.ygeorgiev.com/#license
+ * @package Core
+ */
 class Loader {
 
     /**
      * Loaded models
+     * @access private
      * @var array
      */
     private $_sys_models = array();
+    
+    /**
+     * Loaded libraries
+     * @access private
+     * @var array 
+     */
     private $_sys_libs = array();
     
     public function __construct() {
@@ -17,6 +33,7 @@ class Loader {
     
     /**
      * Load model
+     * @access public
      * @param string $name Model's name
      * @return object Model's instance
      * @throws \Exception
@@ -36,6 +53,7 @@ class Loader {
 
     /**
      * Load view
+     * @access public
      * @param string $name View's name
      * @param array $data Variables for giving
      * @param bool $returnString Return as string or via echo
@@ -74,6 +92,7 @@ class Loader {
     
     /**
      * Get library
+     * @access public
      * @param string $name Library name
      * @return object Library object
      */
@@ -99,6 +118,7 @@ class Loader {
     
     /**
      * Load configuration
+     * @access public
      * @param string $name Configuration file name
      * @return array
      */
@@ -106,10 +126,17 @@ class Loader {
         return Core::load()->getConfig();
     }
     
+    /**
+     * Set up class
+     */
     private function setUp() {
         $this->_sys_core = Core::load();
     }
     
+    /**
+     * Load file
+     * @param mixed $file
+     */
     public function load($file) {
         include $file;
     }
