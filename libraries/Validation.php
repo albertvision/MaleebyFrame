@@ -24,7 +24,7 @@ class Validation {
      * @param array $data Field rules
      * @return array
      */
-    public function validate($data = array()) {
+    public static function validate($data = array()) {
         /*
          * Set data
          */
@@ -38,48 +38,48 @@ class Validation {
          * Fields looping
          */
         foreach($data['rules'] as $field=>$rules) {
-            $result['fields'][$field] = $_POST[$field];
+            $result['fields'][$field] = trim($_POST[$field]);
             /*
              * Rules looping
              */
             foreach($rules as $rule=>$val) {
                 switch ($rule) {
                     case 'required':
-                        if(!strlen($_POST[$field])) {
+                        if(!strlen(trim($_POST[$field]))) {
                             $result['err'][$field] = self::getMSG('required', $field); // Load message
                             $validated[$field][$rule] = TRUE;
                         }
                         break;
                     case 'minLength':
-                        if(!$validated[$field]['required'] && strlen($_POST[$field]) < $val && strlen($_POST[$field])) {
+                        if(!$validated[$field]['required'] && strlen(trim($_POST[$field])) < $val && strlen(trim($_POST[$field]))) {
                             $result['err'][$field] = sprintf(self::getMSG('minLength', $field), $val); // Load message
                             $validated[$field][$rule] = TRUE;
                         }
                         break;
                     case 'maxLength':
-                        if(!$validated[$field]['minLength'] && strlen($_POST[$field]) > $val) {
+                        if(!$validated[$field]['minLength'] && strlen(trim($_POST[$field])) > $val) {
                             $result['err'][$field] = sprintf(self::getMSG('maxLength', $field), $val); // Load message
                             $validated[$field][$rule] = TRUE;
                         }
                         break;
                     case 'equalTo':
-                        if($_POST[$field] != $_POST[$val]) {
+                        if(trim($_POST[$field]) != trim($_POST[$val])) {
                             $result['err'][$field] = sprintf(self::getMSG('equalTo', $field), $val); // Load message
                             $validated[$field][$rule] = TRUE;
                         }
                         break;
                     case 'allowedValues':
-                        if(!$validated[$field]['required'] && ((is_array($val) && !in_array($_POST[$field], $val)) || (!is_array($val) && $_POST[$field] != $val))) {
+                        if(!$validated[$field]['required'] && ((is_array($val) && !in_array(trim($_POST[$field]), $val)) || (!is_array($val) && trim($_POST[$field]) != $val))) {
                             $result['err'][$field] = sprintf(self::getMSG('allowedValues', $field), $val); // Load message
                         }
                         break;
                     case 'banValues':
-                        if(!$validated[$field]['required'] && ((is_array($val) && in_array($_POST[$field], $val)) || (!is_array($val) && $_POST[$field] == $val))) {
+                        if(!$validated[$field]['required'] && ((is_array($val) && in_array(trim($_POST[$field]), $val)) || (!is_array($val) && trim($_POST[$field]) == $val))) {
                             $result['err'][$field] = sprintf(self::getMSG('banValues', $field), $val); // Load message
                         }
                         break;
                     case 'email':
-                        if(!$validated[$field]['required'] && !filter_var($_POST[$field], FILTER_VALIDATE_EMAIL)) {
+                        if(!$validated[$field]['required'] && !filter_var(trim($_POST[$field]), FILTER_VALIDATE_EMAIL)) {
                             $result['err'][$field] = sprintf(self::getMSG('email', $field), $val); // Load message
                         }
                         break;
