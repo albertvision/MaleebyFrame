@@ -87,22 +87,23 @@ class Stuff {
             return false;
         }
     }
-    
+
     /**
-     * Translates date format to bulgarian months
+     * Translates date format to bulgarian
      * @static
      * @param int $timestamp Timestamp
      * @return string Translated date format
      */
-    public static function date($timestamp, $show = 'all') {
-        $months = array("", "Януари", "Февруари", "Март", "Април", "Май", "Юни", "Юли", "Август", "Септември", "Октомври", "Ноември", "Декември");
+    public static function date($format, $timestamp) {
+        $en['months'] = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+        $en['weeks'] = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
+
+        $bg['months'] = array("Януари", "Февруари", "Март", "Април", "Май", "Юни", "Юли", "Август", "Септември", "Октомври", "Ноември", "Декември", "Яну", "Фев", "Март", "Апр", "Май", "Юни", "Юли", "Авг", "Сеп", "Окт", "Ное", "Дек");
+        $bg['weeks'] = array('Понеделник', 'Вторник', 'Сряда', 'Четвъртък', 'Петък', 'Съобта', 'Неделя', 'По', 'Вт', 'Ср', 'Чет', 'Пе', 'Съ', 'Не');
         $m = date('n', $timestamp);
-        $month = str_replace($m, $months[$m], $m);
-        if ($show == 'all') {
-            $format = date('d ' . $month . ' Y в H:i:s', $timestamp);
-        } elseif ($show == 'short') {
-            $format = date('d.' . $m . '.Y в H:i:s', $timestamp);
-        }
+
+        $format = str_ireplace($en['months'], $bg['months'], date($format, $timestamp));
+        $format = str_replace($en['weeks'], $bg['weeks'], $format);
         return $format;
     }
     
