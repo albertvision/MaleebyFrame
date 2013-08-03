@@ -137,7 +137,7 @@ class Loader {
      * Load file
      * @param mixed $file
      */
-    public function load($file) {
+    public static function load($file) {
         include $file;
     }
     
