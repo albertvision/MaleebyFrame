@@ -58,6 +58,7 @@ class Stuff {
      * @param type $senderName Sender name
      * @param type $subject Email subject
      * @param type $content Email content
+     * @deprecated since version 0.2.4
      * @return boolean
      */
     public static function sendMail($receiverEmail, $senderEmail, $senderName, $subject, $content) {
@@ -94,7 +95,7 @@ class Stuff {
      * @param int $timestamp Timestamp
      * @return string Translated date format
      */
-    public static function date($format, $timestamp) {
+    public static function date($format, $timestamp = NULL) {
         $en['months'] = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
         $en['weeks'] = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
 
@@ -102,7 +103,7 @@ class Stuff {
         $bg['weeks'] = array('Понеделник', 'Вторник', 'Сряда', 'Четвъртък', 'Петък', 'Съобта', 'Неделя', 'По', 'Вт', 'Ср', 'Чет', 'Пе', 'Съ', 'Не');
         $m = date('n', $timestamp);
 
-        $format = str_ireplace($en['months'], $bg['months'], date($format, $timestamp));
+        $format = str_ireplace($en['months'], $bg['months'], date($format, ($timestamp == NULL ? time() : $timestamp)));
         $format = str_replace($en['weeks'], $bg['weeks'], $format);
         return $format;
     }
