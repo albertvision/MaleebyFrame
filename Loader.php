@@ -3,7 +3,8 @@
 namespace Maleeby;
 
 /**
- * Loader class. It's used by applications.
+ * Loader trait. It's used by the applications. 
+ * Loading: models, views, libraries, configs, errors, etc.
  *
  * @author Yasen Georgiev <avbincco@gmail.com>
  * @link http://framework.maleeby.ygeorgiev.com/
@@ -11,7 +12,7 @@ namespace Maleeby;
  * @license http://framework.maleeby.ygeorgiev.com/#license
  * @package Core
  */
-class Loader {
+trait Loader {
 
     /**
      * Loaded models
@@ -26,11 +27,7 @@ class Loader {
      * @var array 
      */
     private $_sys_libs = array();
-    
-    public function __construct() {
-        $this->setUp();
-    }
-    
+        
     /**
      * Load model
      * @access public
@@ -115,6 +112,16 @@ class Loader {
         
     }
     
+    public function error($code) {
+        $_dir = Core::load()->getConfig()->main['errors_path'];
+        $_path = realpath('..'.$_dir."/$code.php");
+        if($_path && is_readable($_path) && is_file($_path)) {
+            //$this->view($name)
+        } else {
+            throw new \Exception('Error file not found: '.  Core::fixPath($_dir.DIRECTORY_SEPARATOR.$code.'.php'));
+        }
+        die();
+    }
     
     /**
      * Load configuration
@@ -135,7 +142,7 @@ class Loader {
     
     /**
      * Load file
-     * @param mixed $file
+     * @param string $file
      */
     public static function load($file) {
         include $file;

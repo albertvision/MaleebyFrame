@@ -43,6 +43,7 @@ class Core {
     public $autoload = null;
 
     private function __construct() {
+        $this->checkPHPVersion();
         $this->autoload = AutoLoader::load();
         $this->autoload->setNamespace('Maleeby', realpath(__DIR__));
         set_exception_handler(array('\Maleeby\ErrorHandling', 'catchExceptions'));
@@ -65,9 +66,9 @@ class Core {
      * Application starting
      * @access public
      */
-    public function run() {
+    public function run() {        
         define('SYS_PATH', realpath(__DIR__));
-        define('FRAME_VER', '0.2.4');
+        define('FRAME_VER', '0.3');
         
         $this->config = Config::load();
         $this->config->setConfigDir();
@@ -75,6 +76,14 @@ class Core {
         $this->routing->division();
     }
 
+    /**
+     * Checks PHP Version.
+     */
+    private function checkPHPVersion() {
+        if(phpversion() < 5.4) {
+            die('PHP version too old. To use MaleebyFramework, you must install version 5.4 at least.');
+        }
+    }
     /**
      * Fix path
      * @access public
