@@ -112,14 +112,14 @@ class Routing {
         } elseif ($namespace == null && !$_routesConfig['*']['namespace']) {
             throw new \Exception('Default route in configuration missing!');
         }
-
+        
         $controller = $namespace . '\\' . ucfirst(strtolower($controller));
         $contr = new $controller();
 
         if (method_exists($contr, $method)) {
             $reflection = new \ReflectionMethod($contr, $method);
             if (!$reflection->isPublic()) {
-                throw new \Exception('Method <b>' . $method . '()</b> in class <b>' . $controller . '</b> not accessible!', 404);
+                throw new \Exception('Method <b>' . $method . '()</b> in class <b>' . $controller . '</b> is not accessible!', 404);
             }
             
             /*

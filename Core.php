@@ -68,7 +68,7 @@ class Core {
      */
     public function run() {        
         define('SYS_PATH', realpath(__DIR__));
-        define('FRAME_VER', '0.3');
+        define('FRAME_VER', '0.3.1');
         
         $this->config = Config::load();
         $this->config->setConfigDir();

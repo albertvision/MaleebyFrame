@@ -12,7 +12,7 @@ namespace Maleeby;
  * @license http://framework.maleeby.ygeorgiev.com/#license
  * @package Core
  */
-trait Loader {
+class Loader {
 
     /**
      * Loaded models
@@ -30,12 +30,12 @@ trait Loader {
         
     /**
      * Load model
-     * @access public
+     * @access protected
      * @param string $name Model's name
      * @return object Model's instance
      * @throws \Exception
      */
-    public function model($name) {
+    protected function model($name) {
         $this->setUp();
         $this->_sys_core->autoload->setNamespace('Models', realpath('..' . $this->_sys_core->getConfig()->main['models_path']));
         if (!in_array($name, $this->_sys_models)) {
@@ -50,14 +50,14 @@ trait Loader {
 
     /**
      * Load view
-     * @access public
+     * @access protected
      * @param string $name View's name
      * @param array $data Variables for giving
      * @param bool $returnString Return as string or via echo
      * @return string View's output
      * @throws \Exception
      */
-    public function view($name, $data = array(), $returnString = FALSE, $fullPath = NULL) {
+    protected function view($name, $data = array(), $returnString = FALSE, $fullPath = NULL) {
         $this->setUp();
         $data = (is_array($data) ? $data : array()); 
         $themeURL = (defined(THEME_URL) ? THEME_URL : BASE_URL); //Default theme URL
@@ -89,13 +89,13 @@ trait Loader {
     
     /**
      * Get library
-     * @access public
+     * @access protected
+     * @deprecated
      * @param string $name Library name
      * @return object Library object
      */
-    public function library($name) {
+    protected function library($name) {
         $this->setUp();
-        $this->_sys_core->autoload->setNamespace('Libraries', realpath('../libraries' ));
         if(!in_array($name, $this->_sys_libs)) {
             $_sys_path = realpath(SYS_PATH."/libraries/$name.php");
             $_app_path = realpath(APP_PATH."/libraries/$name.php");
@@ -112,39 +112,31 @@ trait Loader {
         
     }
     
-    public function error($code) {
-        $_dir = Core::load()->getConfig()->main['errors_path'];
-        $_path = realpath('..'.$_dir."/$code.php");
-        if($_path && is_readable($_path) && is_file($_path)) {
-            //$this->view($name)
-        } else {
-            throw new \Exception('Error file not found: '.  Core::fixPath($_dir.DIRECTORY_SEPARATOR.$code.'.php'));
-        }
-        die();
-    }
-    
     /**
      * Load configuration
-     * @access public
+     * @access protected
      * @param string $name Configuration file name
      * @return array
      */
-    public function config() {
+    protected function config() {
         return Core::load()->getConfig();
     }
     
     /**
      * Set up class
+     * @access private
      */
     private function setUp() {
         $this->_sys_core = Core::load();
+        $this->_sys_core->autoload->setNamespace('Libraries', realpath('../libraries' ));
     }
     
     /**
      * Load file
+     * @access private
      * @param string $file
      */
-    public static function load($file) {
+    private function load($file) {
         include $file;
     }
     
