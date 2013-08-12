@@ -26,6 +26,30 @@ class Routing {
      * @var object 
      */
     private $core;
+    
+    /**
+     * Controller name
+     * @var string
+     */
+    private $controller;
+    
+    /**
+     * Method name
+     * @var string
+     */
+    private $method;
+    
+    /**
+     * Routing configuration
+     * @var array
+     */
+    private $routesConfig;
+    
+    /**
+     * Default route configuration
+     * @var array
+     */
+    private $defaultRoute;
 
     /**
      * Current URI data
@@ -51,92 +75,190 @@ class Routing {
     }
 
     /**
+     * Parse URI
+     * @return string
+     */
+    private function parseURI() {
+        
+        $_parsedScriptName = pathinfo($_SERVER['SCRIPT_NAME']);
+        $_parsed = parse_url(str_replace($_parsedScriptName['basename'], '', str_replace($_parsedScriptName['dirname'] . '/', '', $_SERVER['REQUEST_URI'])));
+        
+        $_path = $_parsed['path'][0] == '/' ? substr($_parsed['path'], 1, (strlen($_parsed['path']) - 1)) : $_parsed['path']; // Removes first slash
+        $_path = substr($_path, -1) == '/' ? substr($_path, 0, strlen($_path) - 1) : $_path; //Removes last slash
+        
+        return $_path;
+    }
+    
+    /**
      * Routing of controllers/models/properties
      * @access public
      */
     public function division() {
-        $this->core = Core::load();
-        $this->core->autoload->setNamespace('Controllers', realpath('..' . $this->core->getConfig()->main['controllers_path']));
-        $_config = $this->core->getConfig()->main;
-        $_routesConfig = $this->core->getConfig()->routing;
+        $this->core = Core::load(); //Load Core class
+        
+        $this->routesConfig = $this->core->getConfig()->routing; //Get routing configuration
+        
+        $_path = $this->parseURI();
+        $params = array();
 
-        $_parsedScriptName = pathinfo($_SERVER['SCRIPT_NAME']);
-        $_parsed = parse_url(str_replace($_parsedScriptName['basename'], '', str_replace($_parsedScriptName['dirname'] . '/', '', $_SERVER['REQUEST_URI'])));
-        $_path = $_parsed['path'][0] == '/' ? substr($_parsed['path'], 1, (strlen($_parsed['path']) - 1)) : $_parsed['path']; // Ако завършва на наклонена черта, то тогава я маха
-        $_path = substr($_path, -1) == '/' ? substr($_path, 0, strlen($_path) - 1) : $_path;
-        $_params = array();
+        if ($this->checkConfig()) {
+            $this->defaultRoute = $this->routesConfig['*'];
+            
+            $namespace = $this->defaultRoute['namespace']; // Default namespace
+            $this->core->autoload->setNamespace($namespace, realpath('..' . $this->core->getConfig()->main['controllers_path'])); //Set Controllers namespace
 
-        if (is_array($_routesConfig) && count($_routesConfig) > 0) {
-            foreach ($_routesConfig as $k => $v) {
-                $_params = explode('/', str_replace($k . '/', '', $_path));
-                $controller = $_params[0];
-                $method = $_params[1];
+            foreach ($this->routesConfig as $k => $v) {
+                $params = explode('/', str_replace($k . '/', '', $_path)); //Explode params
+                $this->controller = $params[0];
+                $this->method = $params[1];
                 $pos = strpos(strtolower($_path) . '/', strtolower($k) . '/');
-                if ($pos !== FALSE && $pos === 0) {
-                    $namespace = $v['namespace'];
+                
+                if ($pos !== FALSE && $pos === 0) { //If there is a route for this URI
+                    $namespace = isset($v['namespace']) ? $v['namespace'] : $this->defaultRoute['namespace']; //Set namespace
+                    
+                    /*
+                     * Set default controller
+                     */
                     if (strlen($_path) == strlen($k)) {
-                        if ($v['default_controller']) {
-                            $controller = $v['default_controller'];
+                        $this->controller = $this->getDefaultUriController($v['default_controller']);
+                    }
+                    
+                    /*
+                     * Renaming of a controller
+                     */
+                    if(isset($v['controller'][$this->controller]['rename'])) {
+                        $this->controller = $v['controller'][$this->controller]['rename'];
+                    }
+                    
+                    /*
+                     * Set default method
+                     */
+                    if(!$params[1]) {
+                        if ($v['controller'][$this->controller]['default_method']) { //If specific controller default method is set 
+                            $this->method = $v['controller'][$this->controller]['default_method'];
                         } else {
-                            $controller = $_config['default_controller'];
-                            $method = $_config['default_method'];
+                            $this->method = $this->getDefaultUriMethod($v['default_method']);
                         }
                     }
-                    if ($v['controllers'][$controller]['default_method'] != NULL && !$_params[1]) {
-                        if ($v['controllers'][$controller]['default_method']) {
-                            $method = $v['controllers'][$controller]['default_method'];
-                        } else {
-                            $method = $_config['default_method'];
-                        }
-                    } elseif (!$v['controllers'][$controller]['default_method'] && !$_params[1]) {
-                        $method = $_config['default_method'];
+                    
+                    /*
+                     * Renaming of a method
+                     */
+                    if(isset($v['controller'][$this->controller]['method'][$this->method]['rename'])) {
+                        $this->method = $v['controller'][$this->controller]['method'][$this->method]['rename'];
                     }
+                    
                     break;
                 }
             }
         } else {
-            throw new \Exception('Routes configuration not found!', 500);
-        }
-        unset($_params[0]);
-        unset($_params[1]);
-
-        if (!strlen($_path)) {
-            $controller = $_config['default_controller'];
-            $method = $_config['default_method'];
-        }
-        if ($method == NULL) {
-            $method = $_config['default_method'];
-        }
-        if ($namespace == NULL && $_routesConfig['*']['namespace']) {
-            $namespace = $_routesConfig['*']['namespace'];
-        } elseif ($namespace == null && !$_routesConfig['*']['namespace']) {
-            throw new \Exception('Default route in configuration missing!');
+            throw new \Exception('Invalid routing configuration!', 500);
         }
         
-        $controller = $namespace . '\\' . ucfirst(strtolower($controller));
-        $contr = new $controller();
+        /*
+         * Unset the controller and the method
+         */
+        unset($params[0]);
+        unset($params[1]);
 
-        if (method_exists($contr, $method)) {
-            $reflection = new \ReflectionMethod($contr, $method);
+        /*
+         * Set default controller
+         */
+        if (!strlen($_path)) {
+            $this->controller = $this->defaultRoute['default_controller'];
+        }
+        
+        /*
+         * Renaming of the default controller
+         */
+        if(isset($this->defaultRoute['controller'][$this->controller]['rename'])) {
+            $this->controller = $this->defaultRoute['controller'][$this->controller]['rename'];
+        }
+
+        /*
+         * Set default method
+         */
+        if (!$this->method) {
+            $this->method = $this->getDefaultUriMethod($this->defaultRoute['controller'][$this->controller]['default_method']);
+        }
+        
+        /*
+         * Renaming of the default method
+         */
+        if(isset($this->defaultRoute['controller'][$this->controller]['method'][$this->method]['rename'])) {
+            $this->method = $this->defaultRoute['controller'][$this->controller]['method'][$this->method]['rename'];
+        }
+        
+        $this->controller = $namespace . '\\' . ucfirst(strtolower($this->controller));
+        $controller = new $this->controller();
+
+        /*
+         * If method exists
+         */
+        if (method_exists($controller, $this->method)) {
+            $reflection = new \ReflectionMethod($controller, $this->method);
+            
+            /*
+             * If method is not accesible
+             */
             if (!$reflection->isPublic()) {
-                throw new \Exception('Method <b>' . $method . '()</b> in class <b>' . $controller . '</b> is not accessible!', 404);
+                throw new \Exception('Method <b>' . $this->method . '()</b> in class <b>' . $this->controller . '</b> is not accessible!', 404);
             }
             
             /*
              * Set data in the array
              */
             $this->data = array(
-                'controller' => $controller,
-                'method' => $method,
-                'params' => array_values($_params)
+                'controller' => $this->controller,
+                'method' => $this->method,
+                'params' => array_values($params)
             );
             
-            call_user_func_array(array($contr, $method), $_params);
+            /*
+             * Set params
+             */
+            call_user_func_array(array($controller, $this->method), $params);
         } else {
-            throw new \Exception('Method <b>' . $method . '()</b> in class <b>' . $controller . '</b> not found!', 404);
+            throw new \Exception('Method <b>' . $this->method . '()</b> in class <b>' . $this->controller . '</b> not found!', 404);
         }
     }
 
+    /**
+     * Configuration validation checking
+     * @return boolean
+     */
+    private function checkConfig() {
+        $config = $this->routesConfig;
+        if(isset($config['*']['namespace']) && isset($config['*']['default_controller']) && isset($config['*']['default_method'])) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Get default URI controller
+     * @param string $controller Default controller
+     * @return string
+     */
+    private function getDefaultUriController($controller) {
+        if ($controller) {
+            return $controller;
+        }
+        return $this->defaultRoute['default_controller'];
+    }
+    
+    /**
+     * Get default URI method
+     * @param string $method Default method
+     * @return string
+     */
+    private function getDefaultUriMethod($method) {
+        if(isset($method)) {
+            return $method;
+        }
+        return $this->defaultRoute['default_method'];
+    }
+    
     /**
      * Gets default controller setted in the main configuration
      * @return string Default controller
@@ -163,14 +285,27 @@ class Routing {
         return $contr;
     }
 
+    /**
+     * Get current controller
+     * @return string
+     */
     public function getController() {
         return $this->data['controller'];
     }
 
+    /**
+     * Get current method
+     * @return string
+     */
     public function getMethod() {
         return $this->data['method'];
     }
 
+    /**
+     * Get params
+     * @param int $index Parameter ID - 0, 1, 2, etc.
+     * @return string|array
+     */
     public function getParam($index = NULL) {
         if($index == NULL) {
             return $this->data['params'];
