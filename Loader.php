@@ -20,14 +20,14 @@ class Loader {
      * @var array
      */
     private $_sys_models = array();
-    
+
     /**
      * Loaded libraries
      * @access private
      * @var array 
      */
     private $_sys_libs = array();
-        
+
     /**
      * Load model
      * @access protected
@@ -39,9 +39,9 @@ class Loader {
         $this->setUp();
         $this->_sys_core->autoload->setNamespace('Models', realpath('..' . $this->_sys_core->getConfig()->main['models_path']));
         if (!in_array($name, $this->_sys_models)) {
-            $model = 'Models\\' . str_replace('/','\\', $name);
+            $model = 'Models\\' . str_replace('/', '\\', $name);
             $suffix = $this->_sys_core->getConfig()->main['models_suffix'];
-            $file = Core::fixPath("../".$this->_sys_core->getConfig()->main['models_path'].'/'.$name.$suffix.".php");
+            $file = Core::fixPath("../" . $this->_sys_core->getConfig()->main['models_path'] . '/' . $name . $suffix . ".php");
             $realpath = realpath($file);
             $this->_sys_models[$name] = new $model();
         }
@@ -59,16 +59,16 @@ class Loader {
      */
     protected function view($name, $data = array(), $returnString = FALSE, $fullPath = NULL) {
         $this->setUp();
-        $data = (is_array($data) ? $data : array()); 
+        $data = (is_array($data) ? $data : array());
         $themeURL = (defined(THEME_URL) ? THEME_URL : BASE_URL); //Default theme URL
-        
-        if($fullPath == NULL) {
-            $_sys_path = realpath( '..' . $this->_sys_core->getConfig()->main['views_path'] . DIRECTORY_SEPARATOR. "$name.php");
+
+        if ($fullPath == NULL) {
+            $_sys_path = realpath('..' . $this->_sys_core->getConfig()->main['views_path'] . DIRECTORY_SEPARATOR . "$name.php");
         } else {
             $_sys_path = realpath($name);
         }
         define('THEME_URL', $themeURL);
-        
+
         if (is_readable($_sys_path) && is_file($_sys_path)) {
             ob_start();
             extract($data);
@@ -76,7 +76,7 @@ class Loader {
 
             $output = ob_get_clean();
             ob_end_flush();
-            
+
             if ($returnString) {
                 return $output;
             } else {
@@ -86,7 +86,7 @@ class Loader {
             throw new \Exception("View not found: views/$name.php");
         }
     }
-    
+
     /**
      * Get library
      * @access protected
@@ -96,22 +96,21 @@ class Loader {
      */
     protected function library($name) {
         $this->setUp();
-        if(!in_array($name, $this->_sys_libs)) {
-            $_sys_path = realpath(SYS_PATH."/libraries/$name.php");
-            $_app_path = realpath(APP_PATH."/libraries/$name.php");
+        if (!in_array($name, $this->_sys_libs)) {
+            $_sys_path = realpath(SYS_PATH . "/libraries/$name.php");
+            $_app_path = realpath(APP_PATH . "/libraries/$name.php");
 
-            if($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
+            if ($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
                 $namespace = 'Maleeby\Libraries\\';
             } else {
                 $namespace = 'Libraries\\';
             }
-            $library = $namespace.str_replace('/','\\',$name);
+            $library = $namespace . str_replace('/', '\\', $name);
             $this->_sys_libs[$name] = new $library();
         }
         return $this->_sys_libs[$name];
-        
     }
-    
+
     /**
      * Load configuration
      * @access protected
@@ -121,16 +120,18 @@ class Loader {
     protected function config() {
         return Core::load()->getConfig();
     }
-    
+
     /**
      * Set up class
      * @access private
      */
     private function setUp() {
         $this->_sys_core = Core::load();
-        $this->_sys_core->autoload->setNamespace('Libraries', realpath('../libraries' ));
+        if ($libs = realpath('../libraries')) {
+            $this->_sys_core->autoload->setNamespace('Libraries', $libs);
+        }
     }
-    
+
     /**
      * Load file
      * @access private
@@ -139,11 +140,12 @@ class Loader {
     private function load($file) {
         include $file;
     }
-    
+
     public function __get($name) {
         $this->setUp();
         return $this->model($name);
     }
+
 }
 
 ?>
