@@ -37,7 +37,7 @@ class Loader {
      */
     protected function model($name) {
         $this->setUp();
-        $this->_sys_core->autoload->setNamespace('Models', realpath('..' . $this->_sys_core->getConfig()->main['models_path']));
+        $this->_sys_core->autoload->setNamespace('Models', realpath(APP_PATH . $this->_sys_core->getConfig()->main['models_path']));
         if (!in_array($name, $this->_sys_models)) {
             $model = 'Models\\' . str_replace('/', '\\', $name);
             $suffix = $this->_sys_core->getConfig()->main['models_suffix'];
@@ -63,7 +63,7 @@ class Loader {
         $themeURL = (defined(THEME_URL) ? THEME_URL : BASE_URL); //Default theme URL
 
         if ($fullPath == NULL) {
-            $_sys_path = realpath('..' . $this->_sys_core->getConfig()->main['views_path'] . DIRECTORY_SEPARATOR . "$name.php");
+            $_sys_path = realpath(APP_PATH . $this->_sys_core->getConfig()->main['views_path'] . DIRECTORY_SEPARATOR . "$name.php");
         } else {
             $_sys_path = realpath($name);
         }

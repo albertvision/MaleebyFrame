@@ -12,7 +12,7 @@ namespace Maleeby;
  * @package Core
  */
 class AutoLoader {
-    
+
     /**
      * Instance of this class
      * @access private
@@ -20,38 +20,38 @@ class AutoLoader {
      * @static
      */
     private static $instance = null;
-    
+
     /**
      * Registered namespaces
      * @access private
      * @var array
      */
     private $namespaces = array();
-    
+
     private function __construct() {
         $this->autoLoadRegister();
     }
-    
+
     /**
      * Get autoload instance
      * @return object
      * @access public
      */
     public static function load() {
-        if (self::$instance == null ) {
+        if (self::$instance == null) {
             self::$instance = new \Maleeby\AutoLoader();
         }
         return self::$instance;
     }
-    
+
     /**
      * Registers namespaces' path
      * @access public
      */
     private function autoLoadRegister() {
-        spl_autoload_register(array('\Maleeby\AutoLoader','autoLoad'));
+        spl_autoload_register(array('\Maleeby\AutoLoader', 'autoLoad'));
     }
-    
+
     /**
      * Auto load method.
      * @param string $class Class to load
@@ -59,36 +59,36 @@ class AutoLoader {
      * @throws \Exception 
      */
     public function autoLoad($class) {
-        foreach($this->namespaces as $namespace=>$path) {
-            if(strpos($class, $namespace) === 0) {
-                if(strpos($namespace, 'Controller') === 0) {
+        foreach ($this->namespaces as $namespace => $path) {
+            if (strpos($class, $namespace) === 0) {
+                if (strpos($namespace, 'Controller') === 0) {
                     $suffix = Core::load()->getConfig()->main['controllers_suffix'];
                     $fileType = 'Controller';
                     $errCode = 404;
-                } elseif(strpos($namespace, 'Model') === 0) {
+                } elseif (strpos($namespace, 'Model') === 0) {
                     $suffix = Core::load()->getConfig()->main['models_suffix'];
                     $fileType = 'Model';
                     $errCode = 404;
-                } elseif(strpos($class, 'Libraries') === 0 || strpos($class, 'Maleeby\Libraries') === 0) {
+                } elseif (strpos($class, 'Libraries') === 0 || strpos($class, 'Maleeby\Libraries') === 0) {
                     $fileType = 'Library';
                 } else {
                     $fileType = 'File';
                 }
-                
-                $class = $class.$suffix;
-                $filename = Core::fixPath(str_replace($namespace, $path.DIRECTORY_SEPARATOR, $class).'.php');
+
+                $class = $class . $suffix;
+                $filename = Core::fixPath(str_replace($namespace, $path . DIRECTORY_SEPARATOR, $class) . '.php');
                 $file = realpath($filename);
-                
-                if(file_exists($file)) {
+
+                if (file_exists($file)) {
                     include $file;
                 } else {
-                    throw new \Exception($fileType.' not found: '.$filename, $errCode);
+                    throw new \Exception($fileType . ' not found: ' . $filename, $errCode);
                 }
                 break;
             }
         }
     }
-    
+
     /**
      * Method that sets namespace's path
      * @access public
@@ -98,11 +98,11 @@ class AutoLoader {
      */
     public function setNamespace($namespace, $path) {
         $namespace = trim($namespace);
-        if($namespace) {
-            if($path) {
+        if ($namespace) {
+            if ($path) {
                 $realpath = realpath($path);
-                if(file_exists($realpath)) {
-                    $this->namespaces[$namespace.'\\'] = $realpath;
+                if (file_exists($realpath)) {
+                    $this->namespaces[$namespace . '\\'] = $realpath;
                 } else {
                     throw new \Exception('Invalid namespace path');
                 }
@@ -113,7 +113,7 @@ class AutoLoader {
             throw new \Exception('Invalid namespace name!');
         }
     }
-}
 
+}
 
 ?>

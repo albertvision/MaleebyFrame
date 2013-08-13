@@ -35,7 +35,6 @@ class Core {
      */
     private $routing;
 
-
     /**
      * Instance of AutoLoader class
      * @var object 
@@ -61,17 +60,17 @@ class Core {
         return self::$_instance;
     }
 
-
     /**
      * Application starting
      * @access public
      */
-    public function run() {        
+    public function run() {
         define('SYS_PATH', realpath(__DIR__));
         define('FRAME_VER', '0.4');
-        
+
         $this->config = Config::load();
-        $this->config->setConfigDir();
+        $this->config->setConfigDir(APP_PATH . '/config');
+
         $this->routing = Routing::load();
         $this->routing->division();
     }
@@ -80,10 +79,11 @@ class Core {
      * Checks PHP Version.
      */
     private function checkPHPVersion() {
-        if(phpversion() < 5.4) {
+        if (phpversion() < 5.4) {
             die('PHP version too old. To use MaleebyFramework, you must install version 5.4 at least.');
         }
     }
+
     /**
      * Fix path
      * @access public
@@ -103,7 +103,7 @@ class Core {
     public function getConfig() {
         return $this->config;
     }
-    
+
     /**
      * @access public
      * @param type $name

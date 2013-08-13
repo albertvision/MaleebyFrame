@@ -42,9 +42,8 @@ class ErrorHandling {
      * @return bool|string
      */
     public static function loadErrorFile($errCode) {
-        $_sys_errorFile = Core::load()->getConfig()->main['errors_path']."/$errCode.php";
-        $_sys_errorFilePath = realpath('../'.$_sys_errorFile);
-        if(!$_sys_errorFilePath || !strlen($_sys_errorFile)) {
+        $_sys_errorFilePath = realpath( APP_PATH . Core::load()->getConfig()->main['errors_path']."/$errCode.php" );
+        if(!$_sys_errorFilePath) {
             return '<h1>'.self::getErrorDesc($errCode).'!</h1> <h2>System code: ' . $errCode . '</h2><hr><i>Please, contact with <a href="mailto: '.$_SERVER['SERVER_ADMIN'].'">administrator</a> and say him about this error!</i>';
         } else {
             ob_start();

@@ -85,7 +85,7 @@ class Config {
      * @param string $path New configuration's path
      * @throws Exception
      */
-    public function setConfigDir($path = '../config') {
+    public function setConfigDir($path) {
         $path = realpath($path);
         if (file_exists($path)) {
             $this->config_dir = $path;
