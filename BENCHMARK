@@ -1,0 +1,475 @@
+MaleebyPHP
+--------
+
+C:\xampp\apache\bin>ab.exe -n 1000 -c 5 http://localhost/MaleebyFrame
+This is ApacheBench, Version 2.3 <$Revision: 1373084 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Apache/2.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /MaleebyFrame
+Document Length:        328 bytes
+
+Concurrency Level:      5
+Time taken for tests:   1.137 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Non-2xx responses:      1000
+Total transferred:      573000 bytes
+HTML transferred:       328000 bytes
+Requests per second:    879.40 [#/sec] (mean)
+Time per request:       5.686 [ms] (mean)
+Time per request:       1.137 [ms] (mean, across all concurrent requests)
+Transfer rate:          492.08 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       4
+Processing:     1    5   1.7      5      16
+Waiting:        0    4   1.7      4      15
+Total:          2    5   1.7      5      16
+
+Percentage of the requests served within a certain time (ms)
+  50%      5
+  66%      6
+  75%      6
+  80%      6
+  90%      7
+  95%      8
+  98%     10
+  99%     13
+ 100%     16 (longest request)
+
+C:\xampp\apache\bin>
+
+CodeIgniter
+---------
+C:\xampp\apache\bin>ab.exe -n 1000 -c 5 http://localhost/ci
+This is ApacheBench, Version 2.3 <$Revision: 1373084 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Apache/2.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /ci
+Document Length:        326 bytes
+
+Concurrency Level:      5
+Time taken for tests:   1.157 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Non-2xx responses:      1000
+Total transferred:      569000 bytes
+HTML transferred:       326000 bytes
+Requests per second:    864.20 [#/sec] (mean)
+Time per request:       5.786 [ms] (mean)
+Time per request:       1.157 [ms] (mean, across all concurrent requests)
+Transfer rate:          480.20 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       3
+Processing:     2    5   1.4      5      15
+Waiting:        0    4   1.6      4      14
+Total:          2    5   1.4      5      16
+
+Percentage of the requests served within a certain time (ms)
+  50%      5
+  66%      6
+  75%      6
+  80%      6
+  90%      7
+  95%      8
+  98%      9
+  99%     11
+ 100%     16 (longest request)
+
+C:\xampp\apache\bin>
+
+
+CakePHP
+----------------
+C:\xampp\apache\bin>ab.exe -n 1000 -c 5 http://localhost/cakephp-2.3.8/
+This is ApacheBench, Version 2.3 <$Revision: 1373084 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+
+
+Server Software:        Apache/2.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /cakephp-2.3.8/
+Document Length:        17786 bytes
+
+Concurrency Level:      5
+Time taken for tests:   62.957 seconds
+Complete requests:      55
+Failed requests:        0
+Write errors:           0
+Total transferred:      1085400 bytes
+HTML transferred:       1067160 bytes
+Requests per second:    0.87 [#/sec] (mean)
+Time per request:       5723.338 [ms] (mean)
+Time per request:       1144.668 [ms] (mean, across all concurrent requests)
+Transfer rate:          16.84 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       1
+Processing:  5204 5286  73.7   5272    5651
+Waiting:      168  252  65.3    240     563
+Total:       5204 5287  73.6   5273    5651
+
+Percentage of the requests served within a certain time (ms)
+  50%   5273
+  66%   5293
+  75%   5304
+  80%   5318
+  90%   5383
+  95%   5419
+  98%   5421
+  99%   5651
+ 100%   5651 (longest request)
+
+C:\xampp\apache\bin>
+
+Yii
+--------------
+C:\xampp\apache\bin>ab.exe -n 1000 -c 5 http://localhost/yii-1.1.13.e9e4a0/demos
+/helloworld/
+This is ApacheBench, Version 2.3 <$Revision: 1373084 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Apache/2.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /yii-1.1.13.e9e4a0/demos/helloworld/
+Document Length:        11 bytes
+
+Concurrency Level:      5
+Time taken for tests:   26.414 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      211000 bytes
+HTML transferred:       11000 bytes
+Requests per second:    37.86 [#/sec] (mean)
+Time per request:       132.072 [ms] (mean)
+Time per request:       26.414 [ms] (mean, across all concurrent requests)
+Transfer rate:          7.80 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       3
+Processing:    48  131  56.8    120     632
+Waiting:       48  131  56.8    120     632
+Total:         49  132  56.8    120     632
+
+Percentage of the requests served within a certain time (ms)
+  50%    120
+  66%    139
+  75%    150
+  80%    161
+  90%    184
+  95%    221
+  98%    284
+  99%    358
+ 100%    632 (longest request)
+
+C:\xampp\apache\bin>
+
+
+Simfony
+---------------
+C:\xampp\apache\bin>ab.exe -n 1000 -c 5 http://localhost/Symfony/web/config.php
+This is ApacheBench, Version 2.3 <$Revision: 1373084 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Apache/2.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /Symfony/web/config.php
+Document Length:        3683 bytes
+
+Concurrency Level:      5
+Time taken for tests:   11.944 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      3885000 bytes
+HTML transferred:       3683000 bytes
+Requests per second:    83.73 [#/sec] (mean)
+Time per request:       59.718 [ms] (mean)
+Time per request:       11.944 [ms] (mean, across all concurrent requests)
+Transfer rate:          317.66 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       4
+Processing:    20   59  24.7     54     209
+Waiting:       20   58  24.4     54     209
+Total:         21   59  24.7     54     210
+
+Percentage of the requests served within a certain time (ms)
+  50%     54
+  66%     65
+  75%     72
+  80%     75
+  90%     91
+  95%    109
+  98%    126
+  99%    140
+ 100%    210 (longest request)
+
+C:\xampp\apache\bin>
+
+
+DooPHP
+-----------------
+C:\xampp\apache\bin>ab.exe -n 1000 -c 5 http://localhost/doophp/app/
+This is ApacheBench, Version 2.3 <$Revision: 1373084 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Apache/2.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /doophp/app/
+Document Length:        913 bytes
+
+Concurrency Level:      5
+Time taken for tests:   13.390 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      1114000 bytes
+HTML transferred:       913000 bytes
+Requests per second:    74.68 [#/sec] (mean)
+Time per request:       66.949 [ms] (mean)
+Time per request:       13.390 [ms] (mean, across all concurrent requests)
+Transfer rate:          81.25 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       1
+Processing:    23   66  21.4     62     165
+Waiting:       23   66  21.3     61     164
+Total:         24   67  21.4     62     165
+
+Percentage of the requests served within a certain time (ms)
+  50%     62
+  66%     70
+  75%     77
+  80%     82
+  90%     95
+  95%    109
+  98%    123
+  99%    141
+ 100%    165 (longest request)
+
+C:\xampp\apache\bin>
+
+Kohana
+---------------
+C:\xampp\apache\bin>ab.exe -n 1000 -c 5 http://localhost/kohana/
+This is ApacheBench, Version 2.3 <$Revision: 1373084 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Apache/2.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /kohana/
+Document Length:        3539 bytes
+
+Concurrency Level:      5
+Time taken for tests:   4.196 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      3741000 bytes
+HTML transferred:       3539000 bytes
+Requests per second:    238.35 [#/sec] (mean)
+Time per request:       20.978 [ms] (mean)
+Time per request:       4.196 [ms] (mean, across all concurrent requests)
+Transfer rate:          870.76 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.9      0      13
+Processing:     7   20   8.2     18     144
+Waiting:        3   20   8.2     18     144
+Total:          8   21   8.2     19     144
+
+Percentage of the requests served within a certain time (ms)
+  50%     19
+  66%     21
+  75%     23
+  80%     24
+  90%     30
+  95%     36
+  98%     42
+  99%     50
+ 100%    144 (longest request)
+
+C:\xampp\apache\bin>
+
+FuelPHP
+-----------
+C:\xampp\apache\bin>ab.exe -n 1000 -c 5 http://localhost/fuelphp-1.6.1/public/
+This is ApacheBench, Version 2.3 <$Revision: 1373084 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Apache/2.4.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /fuelphp-1.6.1/public/
+Document Length:        96 bytes
+
+Concurrency Level:      5
+Time taken for tests:   6.038 seconds
+Complete requests:      1000
+Failed requests:        0
+Write errors:           0
+Total transferred:      296000 bytes
+HTML transferred:       96000 bytes
+Requests per second:    165.62 [#/sec] (mean)
+Time per request:       30.189 [ms] (mean)
+Time per request:       6.038 [ms] (mean, across all concurrent requests)
+Transfer rate:          47.88 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.7      0      13
+Processing:    12   29   9.3     28     123
+Waiting:       12   29   9.2     28     122
+Total:         12   30   9.3     28     124
+
+Percentage of the requests served within a certain time (ms)
+  50%     28
+  66%     31
+  75%     33
+  80%     35
+  90%     40
+  95%     46
+  98%     53
+  99%     58
+ 100%    124 (longest request)
+
+C:\xampp\apache\bin>
