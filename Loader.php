@@ -127,7 +127,7 @@ class Loader {
      */
     private function setUp() {
         $this->_sys_core = Core::load();
-        if ($libs = realpath('../libraries')) {
+        if ($libs = realpath(APP_PATH . '/libraries')) {
             $this->_sys_core->autoload->setNamespace('Libraries', $libs);
         }
     }
