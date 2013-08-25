@@ -3,7 +3,7 @@
 namespace Maleeby;
 
 /**
- * Loader trait. It's used by the applications. 
+ * Loader class. It's used by the applications. 
  * Loading: models, views, libraries, configs, errors, etc.
  *
  * @author Yasen Georgiev <avbincco@gmail.com>
@@ -13,6 +13,8 @@ namespace Maleeby;
  * @package Core
  */
 class Loader {
+
+    use Languages;
 
     /**
      * Loaded models
@@ -29,6 +31,12 @@ class Loader {
     private $_sys_libs = array();
 
     /**
+     * Core class
+     * @var object
+     */
+    private $_sys_core = null;
+
+    /**
      * Load model
      * @access protected
      * @param string $name Model's name
@@ -42,7 +50,7 @@ class Loader {
             $model = 'Models\\' . str_replace('/', '\\', $name);
             $suffix = $this->_sys_core->getConfig()->main['models_suffix'];
             $file = Core::fixPath("../" . $this->_sys_core->getConfig()->main['models_path'] . '/' . $name . $suffix . ".php");
-            $realpath = realpath($file);
+            //$realpath = realpath($file);
             $this->_sys_models[$name] = new $model();
         }
         return $this->_sys_models[$name];
@@ -63,7 +71,7 @@ class Loader {
         $themeURL = (defined(THEME_URL) ? THEME_URL : BASE_URL); //Default theme URL
 
         if ($fullPath == NULL) {
-            $_sys_path = realpath(APP_PATH . $this->_sys_core->getConfig()->main['views_path'] . DIRECTORY_SEPARATOR . "$name.php");
+            $_sys_path = realpath(APP_PATH . $this->config()->main['views_path'] . DIRECTORY_SEPARATOR . "$name.php");
         } else {
             $_sys_path = realpath($name);
         }
@@ -127,18 +135,13 @@ class Loader {
      */
     private function setUp() {
         $this->_sys_core = Core::load();
+
+        /**
+         * Set libraries namespace
+         */
         if ($libs = realpath(APP_PATH . '/libraries')) {
             $this->_sys_core->autoload->setNamespace('Libraries', $libs);
         }
-    }
-
-    /**
-     * Load file
-     * @access private
-     * @param string $file
-     */
-    private function load($file) {
-        include $file;
     }
 
     public function __get($name) {
