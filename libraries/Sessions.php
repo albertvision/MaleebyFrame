@@ -14,6 +14,13 @@ namespace Maleeby\Libraries;
 class Sessions {    
     
     /**
+     * Start session
+     */
+    public static function start() {
+        session_start();
+    }
+    
+    /**
      * Sets value of a session
      * @static
      * @param string $name Session's name
