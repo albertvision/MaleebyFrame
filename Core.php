@@ -71,6 +71,7 @@ class Core {
         $this->config = Config::load();
         $this->config->setConfigDir(APP_PATH . '/config');
 
+        $this->autoload->configAutoLoad();
         $this->routing = Routing::load();
         $this->routing->division();
     }

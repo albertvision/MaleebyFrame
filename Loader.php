@@ -106,7 +106,7 @@ class Loader {
         $this->setUp();
         if (!in_array($name, $this->_sys_libs)) {
             $_sys_path = realpath(SYS_PATH . "/libraries/$name.php");
-            $_app_path = realpath(APP_PATH . "/libraries/$name.php");
+            $_app_path = realpath(APP_PATH . "/".$this->_sys_core->getConfig()->main['libraries_path']."/$name.php");
 
             if ($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
                 $namespace = 'Maleeby\Libraries\\';

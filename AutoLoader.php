@@ -51,6 +51,22 @@ class AutoLoader {
     private function autoLoadRegister() {
         spl_autoload_register(array('\Maleeby\AutoLoader', 'autoLoad'));
     }
+    
+    /**
+     * AutoLoad Framework elements specified in the main configuration
+     */
+    public function configAutoLoad() {
+        $_config = Core::load()->getConfig()->main['autoload'];
+        if(is_array($_config) && count($_config) > 1 && $_config['enable'] === TRUE) {
+            unset($_config['enable']);
+            
+            foreach($_config as $key=>$val) {
+                if($key == 'libraries') {
+                    $this->setNamespace('Libraries', APP_PATH.Core::load()->getConfig()->main['libraries_path']);
+                }
+            } 
+        }
+    }
 
     /**
      * Auto load method.
