@@ -56,6 +56,18 @@ class DB {
      * @var array 
      */
     private $params = array();
+    
+    /**
+     * Current connection
+     * @var string
+     */
+    private static $_currentCon = 'default';
+    
+    /**
+     * Loaded connection
+     * @var array
+     */
+    private static $_connections = array();
 
     /**
      * Get instantion of this class
@@ -69,18 +81,43 @@ class DB {
         return self::$_instance;
     }
     
-    
     /**
-     * DB Connect
-     * @static
+     * DB Connection
+     * @param string|object $con Connection name or PDO object
+     * @return object DB Class
+     * @throws \Exception
      */
-    public static function connect() {
+    public static function connect($con = null) {
         $db = self::load();
-        if(self::$_con == null) {
-            self::$_config = \Maleeby\Core::load()->getConfig()->database;
-            $_conData = self::$_config;
-            self::$_con = new \PDO((isset($_conData['driver']) ? $_conData['driver'] : 'mysql').':host='.$_conData['dbhost'].';dbname='.$_conData['dbname'], $_conData['dbuser'], $_conData['dbpass'], (isset($_conData['pdo_options']) ? $_conData['pdo_options'] : array()));
+        
+        self::$_config = \Maleeby\Core::load()->getConfig()->database;
+        
+        if($con == null) { // Set default connection
+            $con = self::$_currentCon; 
+        } else { // Set current connection
+            self::$_currentCon = $con;
         }
+        
+        if($con instanceof \PDO) {
+            self::$_con = $con;
+        } elseif($con != null) {
+            $_conData = self::$_config[$con];
+            
+            if(isset($_conData) && is_array($_conData)) {
+                
+                /**
+                 * Checks if the connection is already used. Increasing productivity
+                 */
+                if(in_array($con, self::$_connections)) {
+                    self::$_con = self::$_connections[$con];
+                } else {
+                    self::$_con = new \PDO((isset($_conData['driver']) ? $_conData['driver'] : 'mysql').':host='.$_conData['dbhost'].';dbname='.$_conData['dbname'], $_conData['dbuser'], $_conData['dbpass'], (isset($_conData['pdo_options']) ? $_conData['pdo_options'] : array()));
+                }
+            } else {
+                throw new \Exception('Database configuration for '.ucfirst($con).' connection not found.');
+            }
+        }
+        
         return $db;
     }
 
@@ -188,7 +225,7 @@ class DB {
      * @return int
      */
     public static function lastID() {
-        $con = self::$_con;
+        $db = self::connect();
         return $con->lastInsertId();
     }
 
