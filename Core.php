@@ -30,10 +30,10 @@ class Core {
 
     /**
      * Instance of Routing class
-     * @access private
+     * @access public
      * @var object 
      */
-    private $routing;
+    public $routing;
 
     /**
      * Instance of AutoLoader class
