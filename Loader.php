@@ -35,7 +35,20 @@ class Loader {
      * @var object
      */
     protected $_sys = null;
+    
+    /**
+     * Configuration class
+     * @var string
+     */
+    protected $config;
 
+    /**
+     * Construct method
+     */
+    public function __construct() {
+        $this->_sys = Core::load();
+        $this->config = $this->_sys->getConfig();
+    }
     /**
      * Load model
      * @access protected
@@ -44,7 +57,6 @@ class Loader {
      * @throws \Exception
      */
     protected function model($name) {
-        $this->setUp();
         $this->_sys->autoload->setNamespace('Models', realpath(APP_PATH . $this->_sys->getConfig()->main['models_path']));
         if (!in_array($name, $this->_sys_models)) {
             $model = 'Models\\' . str_replace('/', '\\', $name);
@@ -66,7 +78,6 @@ class Loader {
      * @throws \Exception
      */
     protected function view($name, $data = array(), $returnString = FALSE, $fullPath = NULL) {
-        $this->setUp();
         $data = (is_array($data) ? $data : array());
         $themeURL = (defined(THEME_URL) ? THEME_URL : BASE_URL); //Default theme URL
 
@@ -103,7 +114,6 @@ class Loader {
      * @return object Library object
      */
     protected function library($name) {
-        $this->setUp();
         if (!in_array($name, $this->_sys_libs)) {
             $_sys_path = realpath(SYS_PATH . "/libraries/$name.php");
             $_app_path = realpath(APP_PATH . "/".$this->_sys->getConfig()->main['libraries_path']."/$name.php");
@@ -129,23 +139,7 @@ class Loader {
         return Core::load()->getConfig();
     }
 
-    /**
-     * Set up class
-     * @access private
-     */
-    private function setUp() {
-        $this->_sys = Core::load();
-
-        /**
-         * Set libraries namespace
-         */
-        if ($libs = realpath(APP_PATH . '/libraries')) {
-            $this->_sys->autoload->setNamespace('Libraries', $libs);
-        }
-    }
-
     public function __get($name) {
-        $this->setUp();
         return $this->model($name);
     }
 
