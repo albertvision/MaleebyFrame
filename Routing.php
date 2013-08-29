@@ -189,8 +189,18 @@ class Routing {
         }
 
         $this->controller = $namespace . '\\' . ucfirst(strtolower($this->controller));
+        
+        /*
+         * Set data in the array
+         */
+        $this->data = array(
+            'controller' => $this->controller,
+            'method' => $this->method,
+            'params' => array_values($params)
+        );
+        
         $controller = new $this->controller();
-
+          
         /*
          * If method exists
          */
@@ -203,15 +213,6 @@ class Routing {
             if (!$reflection->isPublic()) {
                 throw new \Exception('Method <b>' . $this->method . '()</b> in class <b>' . $this->controller . '</b> is not accessible!', 404);
             }
-
-            /*
-             * Set data in the array
-             */
-            $this->data = array(
-                'controller' => $this->controller,
-                'method' => $this->method,
-                'params' => array_values($params)
-            );
 
             /*
              * Set params
@@ -277,7 +278,7 @@ class Routing {
      * @access public
      */
     public function getDefaultMethod() {
-        $contr = $this->core->getConfig()->main['default_method'];
+        $contr = $this->core->getConfig()->routing['*']['default_controller'];
         if (!$contr) {
             $contr = 'index';
         }
