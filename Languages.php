@@ -69,7 +69,7 @@ trait Languages {
         $_lang_dir = ($language != NULL ? $language . DIRECTORY_SEPARATOR : '');
         $_lang_key = '$this->_sys_langs' . ($language != NULL ? "['$language']" : '') . "['$file']";
 
-        $_filename = $this->_sys_core->fixPath(APP_PATH . $this->config()->main['languages_path'] . DIRECTORY_SEPARATOR . $_lang_dir . $file . $_suffix . '.php');
+        $_filename = $this->_sys->fixPath(APP_PATH . $this->config()->main['languages_path'] . DIRECTORY_SEPARATOR . $_lang_dir . $file . $_suffix . '.php');
         $_path = realpath($_filename);
 
         if ($_path && is_readable($_path) && is_file($_path)) {

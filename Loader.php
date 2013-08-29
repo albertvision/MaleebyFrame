@@ -34,7 +34,7 @@ class Loader {
      * Core class
      * @var object
      */
-    private $_sys_core = null;
+    protected $_sys = null;
 
     /**
      * Load model
@@ -45,11 +45,11 @@ class Loader {
      */
     protected function model($name) {
         $this->setUp();
-        $this->_sys_core->autoload->setNamespace('Models', realpath(APP_PATH . $this->_sys_core->getConfig()->main['models_path']));
+        $this->_sys->autoload->setNamespace('Models', realpath(APP_PATH . $this->_sys->getConfig()->main['models_path']));
         if (!in_array($name, $this->_sys_models)) {
             $model = 'Models\\' . str_replace('/', '\\', $name);
-            $suffix = $this->_sys_core->getConfig()->main['models_suffix'];
-            $file = Core::fixPath("../" . $this->_sys_core->getConfig()->main['models_path'] . '/' . $name . $suffix . ".php");
+            $suffix = $this->_sys->getConfig()->main['models_suffix'];
+            $file = Core::fixPath("../" . $this->_sys->getConfig()->main['models_path'] . '/' . $name . $suffix . ".php");
             //$realpath = realpath($file);
             $this->_sys_models[$name] = new $model();
         }
@@ -106,7 +106,7 @@ class Loader {
         $this->setUp();
         if (!in_array($name, $this->_sys_libs)) {
             $_sys_path = realpath(SYS_PATH . "/libraries/$name.php");
-            $_app_path = realpath(APP_PATH . "/".$this->_sys_core->getConfig()->main['libraries_path']."/$name.php");
+            $_app_path = realpath(APP_PATH . "/".$this->_sys->getConfig()->main['libraries_path']."/$name.php");
 
             if ($_sys_path && is_readable($_sys_path) && is_file($_sys_path)) {
                 $namespace = 'Maleeby\Libraries\\';
@@ -134,13 +134,13 @@ class Loader {
      * @access private
      */
     private function setUp() {
-        $this->_sys_core = Core::load();
+        $this->_sys = Core::load();
 
         /**
          * Set libraries namespace
          */
         if ($libs = realpath(APP_PATH . '/libraries')) {
-            $this->_sys_core->autoload->setNamespace('Libraries', $libs);
+            $this->_sys->autoload->setNamespace('Libraries', $libs);
         }
     }
 
