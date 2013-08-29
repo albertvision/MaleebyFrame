@@ -106,12 +106,22 @@ class Config {
     /**
      * Get configuration of any library
      * @access public
-     * @param string $name Library
+     * @param string $library Library
      * @return array Configuration
      */
-    public function __get($name) {
-        return $this->getLibSettings($name);
+    public function __get($library) {
+        return $this->getLibSettings($library);
     }
+    
+    /**
+     * Configuration changing
+     * @param string $name
+     * @param mixed $value
+     */
+    public function __set($library, $value) {
+        $this->data[$library] = $value;
+    }
+    
 
 }
 
