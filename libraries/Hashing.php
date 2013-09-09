@@ -30,6 +30,9 @@ class Hashing  {
             $algo = $_config['algorithm'];
             $algorithm = (isset($algo) && strlen($algo) ? $algo : 'sha256');
         }
+        if(is_array($data)) {
+            $data = implode('-', $data);
+        }
         return hash_hmac(strtolower($algorithm), $data, $salt);
     }
     
