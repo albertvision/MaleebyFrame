@@ -22,6 +22,13 @@ class Loader {
      * @var array
      */
     private $_sys_models = array();
+    
+    /**
+     * Loaded controllers
+     * @access private
+     * @var array
+     */
+    private $_sys_controllers = array();
 
     /**
      * Loaded libraries
@@ -61,11 +68,28 @@ class Loader {
         if (!in_array($name, $this->_sys_models)) {
             $model = 'Models\\' . str_replace('/', '\\', $name);
             $suffix = $this->_sys->getConfig()->main['models_suffix'];
-            $file = Core::fixPath("../" . $this->_sys->getConfig()->main['models_path'] . '/' . $name . $suffix . ".php");
-            //$realpath = realpath($file);
+            //$file = Core::fixPath("../" . $this->_sys->getConfig()->main['models_path'] . '/' . $name . $suffix . ".php");
             $this->_sys_models[$name] = new $model();
         }
         return $this->_sys_models[$name];
+    }
+    
+    /**
+     * Load controller
+     * @access protected
+     * @param string $name Controller's name
+     * @return object Controller's instance
+     * @throws \Exception
+     */
+    protected function controller($name) {
+        $this->_sys->autoload->setNamespace('Controllers', realpath(APP_PATH . $this->_sys->getConfig()->main['controllers_path']));
+        if (!in_array($name, $this->_sys_controllers)) {
+            $controller = 'Controllers\\' . str_replace('/', '\\', $name);
+            $suffix = $this->_sys->getConfig()->main['controllers_suffix'];
+            //$file = Core::fixPath("../" . $this->_sys->getConfig()->main['controllers_path'] . '/' . $name . $suffix . ".php");
+            $this->_sys_controllers[$name] = new $controller();
+        }
+        return $this->_sys_controllers[$name];
     }
 
     /**
