@@ -102,6 +102,7 @@ class Loader {
      * @throws \Exception
      */
     protected function view($name, $data = array(), $returnString = FALSE, $fullPath = NULL) {
+        $name = (substr($name, -4) == '.php' ? substr($name, 0, strlen($name)-4) : $name);
         $data = (is_array($data) ? $data : array());
         $themeURL = (defined(THEME_URL) ? THEME_URL : BASE_URL); //Default theme URL
 
