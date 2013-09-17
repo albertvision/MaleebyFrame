@@ -102,13 +102,15 @@ class Loader {
      * @throws \Exception
      */
     protected function view($name, $data = array(), $returnString = FALSE, $fullPath = NULL) {
-        $name = (substr($name, -4) == '.php' ? substr($name, 0, strlen($name)-4) : $name);
         $data = (is_array($data) ? $data : array());
         $themeURL = (defined(THEME_URL) ? THEME_URL : BASE_URL); //Default theme URL
 
         if ($fullPath == NULL) {
+            $name = (substr($name, -4) == '.php' ? substr($name, 0, strlen($name)-4) : $name);
+            $loadFile = $name.'.php';
             $_sys_path = realpath(APP_PATH . $this->config()->main['views_path'] . DIRECTORY_SEPARATOR . "$name.php");
         } else {
+            $loadFile = $name;
             $_sys_path = realpath($name);
         }
         define('THEME_URL', $themeURL);
@@ -127,7 +129,7 @@ class Loader {
                 echo $output;
             }
         } else {
-            throw new \Exception("View not found: views/$name.php");
+            throw new \Exception("View not found: $loadFile");
         }
     }
 
