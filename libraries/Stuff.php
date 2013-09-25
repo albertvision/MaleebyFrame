@@ -124,20 +124,20 @@ class Stuff {
      * @param string $dir Folder path
      */
     public static function removeDir($dir) { 
-    if (is_dir($dir)) {
-        $obj = scandir($dir);
-        foreach ($obj as $object) { 
-            if ($object != '.' && $object != '..') {
-                if (is_dir($dir . '/' . $object)) { 
-                    removeDir($dir . '/' . $object);  
-                } else {
-                    unlink($dir . '/' . $object); 
+        if (is_dir($dir)) {
+            $obj = scandir($dir);
+            foreach ($obj as $object) { 
+                if ($object != '.' && $object != '..') {
+                    if (is_dir($dir . '/' . $object)) { 
+                        removeDir($dir . '/' . $object);  
+                    } else {
+                        unlink($dir . '/' . $object); 
+                    }
                 }
             }
+            rmdir($dir);
         }
-        rmdir($dir);
     }
-}
     
 }
 
