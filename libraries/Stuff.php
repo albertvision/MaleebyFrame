@@ -156,6 +156,18 @@ class Stuff {
         return false;
     }
     
+    /**
+     * XML to Array convertion
+     * @param string $xml XML to convert
+     * @return string
+     */
+    public static function xmlToArray($xml) {
+        $xml = simplexml_load_file($xml);
+        $xml_array = unserialize(serialize(json_decode(json_encode((array) $xml), 1)));
+        
+        return $xml_array;
+    }
+    
 }
 
 ?>
