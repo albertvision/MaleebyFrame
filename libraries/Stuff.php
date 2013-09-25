@@ -139,6 +139,23 @@ class Stuff {
         }
     }
     
+    /**
+     * Array deep search
+     * @param array|string $needle What to search
+     * @param array $haystack Array to search in it
+     * @return boolean
+     */
+    public static function deep_array($needle, $haystack) {
+        if(in_array($needle, $haystack)) {
+            return true;
+        }
+        foreach($haystack as $element) {
+            if(is_array($element) && sTUFF::deep_array($needle, $element))
+                return true;
+        }
+        return false;
+    }
+    
 }
 
 ?>
