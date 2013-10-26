@@ -24,7 +24,9 @@ class ErrorHandling {
     public static function catchExceptions(\Exception $err) {
         header('HTTP/1.0 '.$err->getCode().' '.self::getErrorDesc($err->getCode()));
         if (Core::load()->getConfig()->main['debug'] === TRUE) {
-            echo '<p><b>System error: </b>' . $err->getMessage() . ' in ' . $err->getFile() . ':' . $err->getLine() . '</b></p>';
+            $errFile = $err->getTrace()[1];
+            echo '<p><b>System error: </b>' . $err->getMessage() . ' in ' . $errFile['file'] . ':' . $errFile['line'] . '</b></p>';
+            //echo '<p><b>System error: </b>' . $err->getMessage() . ' in ' . $err->getFile() . ':' . $err->getLine() . '</b></p>';
         } else {
             $errCode = ($err->getCode() != 0 ? $err->getCode() : 500);
             $output = self::loadErrorFile($errCode);
