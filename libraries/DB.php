@@ -108,17 +108,25 @@ class DB {
                 /**
                  * Checks if the connection is already used. Increasing productivity
                  */
-                if(in_array($con, self::$_connections)) {
-                    self::$_con = self::$_connections[$con];
-                } else {
-                    self::$_con = new \PDO((isset($_conData['driver']) ? $_conData['driver'] : 'mysql').':host='.$_conData['dbhost'].';dbname='.$_conData['dbname'], $_conData['dbuser'], $_conData['dbpass'], (isset($_conData['pdo_options']) ? $_conData['pdo_options'] : array()));
+                if(!array_key_exists($con, self::$_connections)) {
+                    self::$_connections[$con] = new \PDO((isset($_conData['driver']) ? $_conData['driver'] : 'mysql').':host='.$_conData['dbhost'].';dbname='.$_conData['dbname'], $_conData['dbuser'], $_conData['dbpass'], (isset($_conData['pdo_options']) ? $_conData['pdo_options'] : array()));
                 }
+                
+                self::$_con = self::$_connections[$con];
             } else {
                 throw new \Exception('Database configuration for '.ucfirst($con).' connection not found.');
             }
         }
         
         return $db;
+    }
+    
+    /**
+     * Get the PDO connection object
+     * @return object
+     */
+    public static function getConnection() {
+        return self::$_con;
     }
 
     
@@ -225,8 +233,7 @@ class DB {
      * @return int
      */
     public static function lastID() {
-        $db = self::connect();
-        return $con->lastInsertId();
+        return self::$_con->lastInsertId();
     }
 
     /**
