@@ -18,8 +18,8 @@ class Stuff {
      * @static
      * @param string $url Redirect URL
      */
-    public static function redirect($url) {
-        header('Location: '.BASE_URL.$url);
+    public static function redirect($url, $fullURL = false) {
+        header('Location: '.($fullURL ? '' : BASE_URL).$url);
         die();
     }
     
