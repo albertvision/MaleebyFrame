@@ -129,14 +129,17 @@ class Stuff {
             foreach ($obj as $object) { 
                 if ($object != '.' && $object != '..') {
                     if (is_dir($dir . '/' . $object)) { 
-                        removeDir($dir . '/' . $object);  
+                        Stuff::removeDir($dir . '/' . $object);  
                     } else {
                         unlink($dir . '/' . $object); 
                     }
                 }
             }
-            rmdir($dir);
+            if(rmdir($dir)) {
+                return true;
+            }
         }
+        return false;
     }
     
     /**
