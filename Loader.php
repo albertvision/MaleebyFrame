@@ -103,7 +103,6 @@ class Loader {
      */
     protected function view($name, $data = array(), $returnString = FALSE, $fullPath = NULL) {
         $data = (is_array($data) ? $data : array());
-        $themeURL = (defined(THEME_URL) ? THEME_URL : BASE_URL); //Default theme URL
 
         if ($fullPath == NULL) {
             $name = (substr($name, -4) == '.php' ? substr($name, 0, strlen($name)-4) : $name);
@@ -113,7 +112,6 @@ class Loader {
             $loadFile = $name;
             $_sys_path = realpath($name);
         }
-        define('THEME_URL', $themeURL);
 
         if (is_readable($_sys_path) && is_file($_sys_path)) {
             ob_start();
