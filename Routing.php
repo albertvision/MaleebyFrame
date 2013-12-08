@@ -107,7 +107,7 @@ class Routing {
              * If method is not accesible
              */
             if (!$reflection->isPublic()) {
-                throw new \Exception('Method <b>' . $parsed['method'] . '()</b> in class <b>' . $controller . '</b> is not accessible!', 404);
+                throw new \Exception('Method <b>' . $parsed['method'] . '()</b> in class <b>' . $parsed['controller'] . '</b> is not accessible!', 404);
             }
 
             /*
@@ -115,7 +115,7 @@ class Routing {
              */
             call_user_func_array(array($controller, $parsed['method']), $parsed['params']);
         } else {
-            throw new \Exception('Method <b>' . $parsed['method'] . '()</b> in class <b>' . $controller . '</b> not found!', 404);
+            throw new \Exception('Method <b>' . $parsed['method'] . '()</b> in class <b>' . $parsed['controller'] . '</b> not found!', 404);
         }
         
     }
