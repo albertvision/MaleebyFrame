@@ -21,44 +21,25 @@ class Routing {
     private static $_instance = null;
 
     /**
-     * Instance of Core class 
-     * @access private
-     * @var object 
-     */
-    private $core;
-
-    /**
-     * Controller name
-     * @var string
-     */
-    private $controller;
-
-    /**
-     * Method name
-     * @var string
-     */
-    private $method;
-
-    /**
      * Routing configuration
      * @var array
      */
-    private $routesConfig;
-
-    /**
-     * Default route configuration
-     * @var array
-     */
-    private $defaultRoute;
+    private $_routesConfig;
 
     /**
      * Current URI data
      * @var array
      */
-    public $data = array();
+    private $_route_data = array();
 
     private function __construct() {
-        ;
+        $this->_routesConfig = Config::load()->routing; //Get routing configuration
+        
+        if($this->checkConfig()) {
+            AutoLoader::load()->setNamespace($this->_routesConfig['namespace'], realpath(APP_PATH . Config::load()->main['controllers_path'])); //Set Controllers namespace
+        } else {
+            throw new \Exception('Invalid routing configuration', 500);
+        }
     }
 
     /**
@@ -73,224 +54,218 @@ class Routing {
         }
         return self::$_instance;
     }
-
+    
     /**
-     * Parse URI
-     * @return string
+     * Configuration validating
+     * @return boolean
      */
-    private function parseURI() {
-
-        $_parsedScriptName = pathinfo($_SERVER['SCRIPT_NAME']);
-        $_parsed = parse_url(str_replace($_parsedScriptName['basename'], '', str_replace($_parsedScriptName['dirname'] . '/', '', $_SERVER['REQUEST_URI'])));
-
-        $_path = $_parsed['path'][0] == '/' ? substr($_parsed['path'], 1, (strlen($_parsed['path']) - 1)) : $_parsed['path']; // Removes first slash
-        $_path = substr($_path, -1) == '/' ? substr($_path, 0, strlen($_path) - 1) : $_path; //Removes last slash
-
-        return $_path;
+    private function checkConfig() {
+        if(isset($this->_routesConfig['namespace'], $this->_routesConfig['default_route'])) {
+            if(!isset($this->_routesConfig['routes'])) {
+                $this->_routesConfig['routes'] = array();
+            }
+            return true;
+        }
+        return false;
     }
-
+    
     /**
-     * Routing of controllers/models/properties
-     * @access public
+     * Division of the URI
+     * @throws \Exception
      */
     public function division() {
-        $this->core = Core::load(); //Load Core class
-
-        $this->routesConfig = $this->core->getConfig()->routing; //Get routing configuration
-
-        $_path = $this->parseURI();
-        $params = array();
-
-        if ($this->checkConfig()) {
-            $this->defaultRoute = $this->routesConfig['*'];
-
-            $namespace = $this->defaultRoute['namespace']; // Default namespace
-            $this->core->autoload->setNamespace($namespace, realpath(APP_PATH . $this->core->getConfig()->main['controllers_path'])); //Set Controllers namespace
-            foreach ($this->routesConfig as $k => $v) {
-                $params = explode('/', str_replace($k . '/', '', $_path)); //Explode params
-                $this->controller = $params[0];
-                $this->method = $params[1];
-                $pos = strpos(strtolower($_path) . '/', strtolower($k) . '/');
-
-                if ($pos !== FALSE && $pos === 0) { //If there is a route for this URI
-                    $namespace = isset($v['namespace']) ? $v['namespace'] : $this->defaultRoute['namespace']; //Set namespace
-
-                    /*
-                     * Set default controller
-                     */
-                    if (strlen($_path) == strlen($k)) {
-                        $this->controller = $this->getDefaultUriController($v['default_controller']);
-                    }
-
-                    /*
-                     * Renaming of a controller
-                     */
-                    if (isset($v['controller'][$this->controller]['rename'])) {
-                        $this->controller = $v['controller'][$this->controller]['rename'];
-                    }
-
-                    /*
-                     * Set default method
-                     */
-                    if (!$params[1]) {
-                        if ($v['controller'][$this->controller]['default_method']) { //If specific controller default method is set 
-                            $this->method = $v['controller'][$this->controller]['default_method'];
-                        } else {
-                            $this->method = $this->getDefaultUriMethod($v['default_method']);
-                        }
-                    }
-
-                    /*
-                     * Renaming of a method
-                     */
-                    if (isset($v['controller'][$this->controller]['method'][$this->method]['rename'])) {
-                        $this->method = $v['controller'][$this->controller]['method'][$this->method]['rename'];
-                    }
-
-                    break;
+        $uri = $this->getReqURI();
+        $route = $this->createRoute($uri);
+        
+        /*
+         * Checks for matches in the routing configuration
+         */
+        foreach($this->_routesConfig['routes'] as $key=>$value) {
+            if(preg_match($this->createURIRegexPattern($key), $uri, $output)) {
+                foreach($output as $var_name=>$var_val) {
+                    $value = str_replace('{'.$var_name.'}', $var_val, $value);
                 }
+                $route = $value;
+                break;
             }
-        } else {
-            throw new \Exception('Invalid routing configuration!', 500);
         }
-
-        /*
-         * Unset the controller and the method
-         */
-        unset($params[0]);
-        unset($params[1]);
-
-        /*
-         * Set default controller
-         */
-        if (!strlen($_path)) {
-            $this->controller = $this->defaultRoute['default_controller'];
-        }
-
-        /*
-         * Renaming of the default controller
-         */
-        if (isset($this->defaultRoute['controller'][$this->controller]['rename'])) {
-            $this->controller = $this->defaultRoute['controller'][$this->controller]['rename'];
-        }
-
-        /*
-         * Set default method
-         */
-        if (!$this->method) {
-            $this->method = $this->getDefaultUriMethod($this->defaultRoute['controller'][$this->controller]['default_method']);
-        }
-
-        /*
-         * Renaming of the default method
-         */
-        if (isset($this->defaultRoute['controller'][$this->controller]['method'][$this->method]['rename'])) {
-            $this->method = $this->defaultRoute['controller'][$this->controller]['method'][$this->method]['rename'];
-        }
-
-        $this->controller = $namespace . '\\' . ucfirst(strtolower($this->controller));
         
-        /*
-         * Set data in the array
-         */
-        $this->data = array(
-            'controller' => $this->controller,
-            'method' => $this->method,
-            'params' => array_values($params)
-        );
+        $parsed = $this->parseRoute($route);
+        $parsed['controller'] = $this->_routesConfig['namespace'].'\\'.$parsed['controller'];        
         
-        $controller = new $this->controller();
-          
+        $this->_route_data = $this->parseRoute($this->createRoute($parsed));
+        
+        $controller = new $parsed['controller']();
+        
         /*
          * If method exists
          */
-        if (method_exists($controller, $this->method)) {
-            $reflection = new \ReflectionMethod($controller, $this->method);
+        if (method_exists($controller, $parsed['method'])) {
+            $reflection = new \ReflectionMethod($controller, $parsed['method']);
 
             /*
              * If method is not accesible
              */
             if (!$reflection->isPublic()) {
-                throw new \Exception('Method <b>' . $this->method . '()</b> in class <b>' . $this->controller . '</b> is not accessible!', 404);
+                throw new \Exception('Method <b>' . $parsed['method'] . '()</b> in class <b>' . $controller . '</b> is not accessible!', 404);
             }
 
             /*
              * Set params
              */
-            call_user_func_array(array($controller, $this->method), $params);
+            call_user_func_array(array($controller, $parsed['method']), $parsed['params']);
         } else {
-            throw new \Exception('Method <b>' . $this->method . '()</b> in class <b>' . $this->controller . '</b> not found!', 404);
+            throw new \Exception('Method <b>' . $parsed['method'] . '()</b> in class <b>' . $controller . '</b> not found!', 404);
         }
+        
     }
-
+    
+    
     /**
-     * Configuration validation checking
-     * @return boolean
-     */
-    private function checkConfig() {
-        $config = $this->routesConfig;
-        if (isset($config['*']['namespace']) && isset($config['*']['default_controller']) && isset($config['*']['default_method'])) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Get default URI controller
-     * @param string $controller Default controller
+     * Parse URI
      * @return string
      */
-    private function getDefaultUriController($controller) {
-        if ($controller) {
-            return $controller;
-        }
-        return $this->defaultRoute['default_controller'];
+    private function getReqURI() {
+        $parsedScriptName = pathinfo($_SERVER['SCRIPT_NAME']);
+        $parsed = parse_url(str_replace(array($parsedScriptName['basename'], $parsedScriptName['dirname'] . '/'), '', $_SERVER['REQUEST_URI']));
+        
+        return $this->clearURL($parsed['path']);
     }
-
+    
     /**
-     * Get default URI method
-     * @param string $method Default method
+     * Cleans the slashes in URL
+     * @param string $url URL to clean
      * @return string
      */
-    private function getDefaultUriMethod($method) {
-        if (isset($method)) {
-            return $method;
+    public function clearURL($url) {
+        $url = str_replace('//', '/', $url);
+        
+        if($url[0] == '/') {
+            $url = substr($url, 1, strlen($url));
+        } if(substr($url, -1) == '/') {
+            $url = substr($url, 0, strlen($url)-1);
+        } if(strpos($url, '//') !== FALSE) {
+            $url = $this->clearURL($url);
         }
-        return $this->defaultRoute['default_method'];
+        
+        return $url;
+    }
+    
+    /**
+     * Prases a route to array. It contains 4 keys - controller, method, params and route.
+     * 
+     * @param string $route
+     * @return array
+     * @throws \Exception Invalid route
+     */
+    public function parseRoute($route) {
+        if(is_string($route) && strpos($route, '@') !== FALSE && strlen($route)) {
+            $_parse = explode('@', $route);
+            
+            $parsed['controller'] = $_parse[0];
+            $parsed['method'] = $_parse[1];
+            
+            unset($_parse[0], $_parse[1]);
+            
+            $parsed['params'] = array_values($_parse);
+            $parsed['route'] = array(
+                'partial' => $parsed['controller'].'@'.$parsed['method'],
+                'full' => $route
+            );
+        } else {
+            throw new \Exception('Invalid route to parse ['.$route.']', 500);
+        }
+        
+        return $parsed;
+    }
+    
+    /**
+     * Create a route by string or array
+     * 
+     * @param string|array $route String/Array to be converted to route
+     * @return string
+     * @throws \Exception
+     */
+    public function createRoute($route) {
+        if(is_string($route)) {
+            $default_route = $this->parseRoute($this->_routesConfig['default_route']);
+            $parse = explode('/', $route);
+            
+            if(!isset($parse[0]) || !strlen($parse[0])) {
+                $ready_route = $this->_routesConfig['default_route'];
+            } elseif(!isset($parse[1])) {
+                $ready_route = $route.'@'.$default_route['method'];
+            } else {
+                $ready_route = ucfirst(strtolower($parse[0])).'@'.  $parse[1];
+                unset($parse[0], $parse[1]);
+                if(count($parse)) {
+                    $ready_route .= '@'.implode('@', $parse);
+                }
+            }
+            
+        } elseif(is_array($route)) {
+            if(array_key_exists('controller', $route) && is_string($route['controller']) && strlen($route['controller'])) {
+                $ready_route = $route['controller'].'@';
+                if(array_key_exists('method', $route) && is_string($route['method']) && strlen($route['method'])) { 
+                    $ready_route .= $route['method'];
+                    
+                    if(array_key_exists('params', $route) && is_array($route['params']) && count($route['params'])) {
+                        $ready_route .= '@'.implode('@', $route['params']);
+                    }
+                    
+                } else {
+                    throw new \Exception('Invalid method submitted to parse', 500);
+                }
+            } else {
+                throw new \Exception('Invalid controller submitted to parse', 500);
+            }
+        }
+        
+        return $ready_route;
+    }
+    
+    /**
+     * Changes the route. 
+     * Eg. Controller@Method to Controller1@Method2
+     * 
+     * @param string $route Route to change
+     * @param array $prop New route's properties
+     * @return string The new route
+     */
+    public function changeRoute($route, $prop = array()) {
+        $arr = array_merge($this->parseRoute($route), $prop);
+        
+        return $this->createRoute($arr);
+    }
+    
+    /**
+     * Creates a URI regex pattern
+     * @param string $routePattern Route pattern
+     * @return string Ready regex
+     */
+    public function createURIRegexPattern($routePattern) {
+        preg_match_all('/{(\w+)}{1,}/', $routePattern, $required_params); // Required URI params
+        preg_match_all('/{(\w+)\?}{0,}/', $routePattern, $optional_params); // Optional URI params
+        
+        $url_regex = $routePattern;
+        
+        foreach($required_params[1] as $match) {
+            $url_regex = str_replace('{'.$match.'}', '(?<'.$match.'>\b\w*\b)', $url_regex);
+        }
+        foreach($optional_params[1] as $match) {
+            $url_regex = str_replace('/{'.$match.'?}', '/{0,1}(?<'.$match.'>\b\w*\b){0,1}', $url_regex);
+        }
+        
+        return '/'.str_replace('/', '\\/', $url_regex).'/';
     }
 
-    /**
-     * Gets default controller setted in the main configuration
-     * @return string Default controller
-     * @access public
-     */
-    public function getDefaultController() {
-        $contr = $this->core->getConfig()->main['default_controller'];
-        if (!$contr) {
-            $contr = 'DefaultController';
-        }
-        return $contr;
-    }
-
-    /**
-     * Gets default controller method setted in the main configuration
-     * @return string Default method
-     * @access public
-     */
-    public function getDefaultMethod() {
-        $contr = $this->core->getConfig()->routing['*']['default_controller'];
-        if (!$contr) {
-            $contr = 'index';
-        }
-        return $contr;
-    }
 
     /**
      * Get current controller
      * @return string
      */
     public function getController() {
-        return $this->data['controller'];
+        return $this->_route_data['controller'];
     }
 
     /**
@@ -298,7 +273,7 @@ class Routing {
      * @return string
      */
     public function getMethod() {
-        return $this->data['method'];
+        return $this->_route_data['method'];
     }
 
     /**
@@ -308,9 +283,17 @@ class Routing {
      */
     public function getParam($index = NULL) {
         if ($index == NULL) {
-            return $this->data['params'];
+            return $this->_route_data['params'];
         }
-        return $this->data['params'][$index];
+        return $this->_route_data['params'][$index];
+    }
+    
+    /**
+     * Get current route
+     * @return string
+     */
+    public function getRoute($route_part = 'full') {
+        return $this->_route_data['route'][$route_part];
     }
 
 }
