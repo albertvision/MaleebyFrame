@@ -215,7 +215,7 @@ class Routing {
         } elseif(is_array($route)) {
             if(array_key_exists('controller', $route) && is_string($route['controller']) && strlen($route['controller'])) {
                 $ready_route = $route['controller'].'@';
-                if(array_key_exists('method', $route) && is_string($route['method']) && strlen($route['method'])) { 
+                if(array_key_exists('method', $route) && is_string($route['method'])) { 
                     $ready_route .= $route['method'];
                     
                     if(array_key_exists('params', $route) && is_array($route['params']) && count($route['params'])) {
