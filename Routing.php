@@ -32,12 +32,6 @@ class Routing {
      */
     private $_route_data = array();
     
-    /**
-     * Reserved method names
-     * @var array
-     */
-    private $_reservedMethodNames = array('_methodNotFound');
-
     private function __construct() {
         $this->_routesConfig = Config::load()->routing; //Get routing configuration
         
@@ -107,7 +101,7 @@ class Routing {
         /*
          * If method exists
          */
-        if (method_exists($controller, $parsed['method']) && !in_array($parsed['method'], $this->_reservedMethodNames)) {
+        if (method_exists($controller, $parsed['method']) && $parsed['method'][0] != '_') {
             $reflection = new \ReflectionMethod($controller, $parsed['method']);
 
             /*
