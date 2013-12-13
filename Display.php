@@ -42,7 +42,7 @@ class Display extends Loader {
             $xml = new \SimpleXMLElement('<api/>');
             foreach ($data as $key => $value) {
                 if (is_array($value)) {
-                    array2xml($value, $xml->addChild($key));
+                    self::array2xml($value, $xml->addChild($key));
                 } else {
                     $xml->addChild($key, $value);
                 }
@@ -63,6 +63,20 @@ class Display extends Loader {
 
     public static function doesExist($type) {
         return method_exists(__CLASS__, $type);
+    }
+    
+    public static function array2xml($array, $xml = false) {
+        if($xml === false){
+            $xml = new SimpleXMLElement('<root/>');
+        }
+        foreach($array as $key => $value){
+            if(is_array($value)){
+                array2xml($value, $xml->addChild($key));
+            }else{
+                $xml->addChild($key, $value);
+            }
+        }
+        return $xml->asXML();
     }
 
 }
