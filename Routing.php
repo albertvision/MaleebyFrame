@@ -31,6 +31,12 @@ class Routing {
      * @var array
      */
     private $_route_data = array();
+    
+    /**
+     * Reserved method names
+     * @var array
+     */
+    private $_reservedMethodNames = array('_methodNotFound');
 
     private function __construct() {
         $this->_routesConfig = Config::load()->routing; //Get routing configuration
@@ -77,6 +83,7 @@ class Routing {
         $uri = $this->getReqURI();
         $route = $this->createRoute($uri);
         
+        
         /*
          * Checks for matches in the routing configuration
          */
@@ -100,7 +107,7 @@ class Routing {
         /*
          * If method exists
          */
-        if (method_exists($controller, $parsed['method'])) {
+        if (method_exists($controller, $parsed['method']) && !in_array($parsed['method'], $this->_reservedMethodNames)) {
             $reflection = new \ReflectionMethod($controller, $parsed['method']);
 
             /*
@@ -114,6 +121,8 @@ class Routing {
              * Set params
              */
             call_user_func_array(array($controller, $parsed['method']), $parsed['params']);
+        } elseif(method_exists($controller, '_methodNotFound')) {
+            call_user_func_array(array($controller, '_methodNotFound'), [$parsed['method'], $parsed['params']]);
         } else {
             throw new \Exception('Method <b>' . $parsed['method'] . '()</b> in class <b>' . $parsed['controller'] . '</b> not found!', 404);
         }
@@ -152,7 +161,7 @@ class Routing {
     }
     
     /**
-     * Prases a route to array. It contains 4 keys - controller, method, params and route.
+     * Parses a route to array. It contains 4 keys - controller, method, params and route.
      * 
      * @param string $route
      * @return array
