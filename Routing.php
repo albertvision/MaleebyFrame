@@ -291,7 +291,7 @@ class Routing {
      * @return string|array
      */
     public function getParam($index = NULL) {
-        if ($index == NULL) {
+        if ($index === NULL) {
             return $this->_route_data['params'];
         }
         return $this->_route_data['params'][$index];
